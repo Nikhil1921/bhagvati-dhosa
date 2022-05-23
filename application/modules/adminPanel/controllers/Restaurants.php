@@ -39,6 +39,7 @@ class Restaurants extends Admin_controller  {
             $sub_array[] = $row->name;
             $sub_array[] = $row->c_name;
             $sub_array[] = $row->mobile;
+            $sub_array[] = $row->email;
 
             $action = '<div class="basic-dropdown">
                         <div class="dropdown">
@@ -75,28 +76,59 @@ class Restaurants extends Admin_controller  {
 	{
         $this->form_validation->set_rules($this->validate);
 
+        $data['title'] = $this->title;
+        $data['name'] = $this->name;
+        $data['operation'] = $id === 0 ? "Add" : "Update";
+        $data['url'] = $this->redirect;
+
+        if($id !== 0) $data['data'] = $this->main->get($this->table, 'name, c_name, mobile, email, address, logo', ['id' => d_id($id)]);
+        
         if ($this->form_validation->run() == FALSE)
         {
-            $data['title'] = $this->title;
-            $data['name'] = $this->name;
-            $data['operation'] = $id === 0 ? "Add" : "Update";
-            $data['url'] = $this->redirect;
-
-            if($id !== 0) $data['data'] = $this->main->get($this->table, 'name, c_name, mobile', ['id' => d_id($id)]);
-            
             return $this->template->load('template', "$this->redirect/form", $data);
         }else{
-            $post = [
-                'name' => $this->input->post('name'),
-                'c_name' => $this->input->post('c_name'),
-                'mobile' => $this->input->post('mobile')
-            ];
+            if($id === 0)
+            {
+                $image = $this->uploadImage('logo');
+                if ($image['error'] == TRUE){
+                    $this->session->set_flashdata('error', $image["message"]);
+                    return $this->template->load('template', "$this->redirect/form", $data);
+                }else
+                    $img = $image["message"];
+            }else{
+                if (!empty($_FILES['logo']['name'])) {
+                    $image = $this->uploadImage('logo');
+                    if ($image['error'] == TRUE){
+                        $this->session->set_flashdata('error', $image["message"]);
+                        return $this->template->load('template', "$this->redirect/form", $data);
+                    }else
+                        $img = $image["message"];
+                }else
+                    $img = $this->input->post('logo');
+            }
 
+            $post = [
+                'name'    => $this->input->post('name'),
+                'c_name'  => $this->input->post('c_name'),
+                'mobile'  => $this->input->post('mobile'),
+                'address' => $this->input->post('address'),
+                'email'   => $this->input->post('email'),
+                'logo'    => $img
+            ];
+            
             if ($this->input->post('password'))
 			    $post['password'] = my_crypt($this->input->post('password'));
                 
             $uid = ($id === 0) ? $this->main->add($post, $this->table) : $this->main->update(['id' => d_id($id)], $post, $this->table);
             $msg = ($id === 0) ? 'added' : 'updated';
+            
+            if ($id !== 0) {
+                $unlink = $this->input->post('logo');
+                if($uid && $unlink !== $img && is_file($this->path.$unlink))
+                    unlink($this->path.$unlink);
+                if(!$uid)
+                    unlink($this->path.$img);
+            }
 
             flashMsg($uid, "$this->title $msg.", "$this->title not $msg. Try again.", $this->redirect);
         }
@@ -122,6 +154,20 @@ class Restaurants extends Admin_controller  {
         if ($this->main->check($this->table, $where, 'id'))
         {
             $this->form_validation->set_message('mobile_check', 'The %s is already in use');
+            return FALSE;
+        } else
+            return TRUE;
+    }
+
+    public function email_check($str)
+    {   
+        $id = $this->uri->segment(4) ? $this->uri->segment(4) : 0;
+        
+        $where = ['email' => $str, 'id != ' => d_id($id)];
+        
+        if ($this->main->check($this->table, $where, 'id'))
+        {
+            $this->form_validation->set_message('email_check', 'The %s is already in use');
             return FALSE;
         } else
             return TRUE;
@@ -175,5 +221,15 @@ class Restaurants extends Admin_controller  {
                 'max_length' => "Max 100 chars allowed.",
             ],
         ],
+        [
+            'field' => 'email',
+            'label' => 'Email',
+            'rules' => 'required|max_length[100]|valid_email|callback_email_check|trim',
+            'errors' => [
+                'required' => "%s is required",
+                'max_length' => "Max 100 chars allowed.",
+                'valid_email' => "%s is invalid",
+            ],
+        ]
     ];
 }

@@ -6,7 +6,7 @@
         </div>
         <div class="card">
             <div class="card-body py-0 pt-2">
-                <?= form_open() ?>
+                <?= form_open_multipart('', '', ['logo' => isset($data['logo']) ? $data['logo'] : '']) ?>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -52,15 +52,64 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <?= form_label('Email', 'email', 'class="col-form-label"') ?>
+                                <?= form_input([
+                                    'class' => "form-control",
+                                    'id' => "email",
+                                    'type' => "email",
+                                    'name' => "email",
+                                    'maxlength' => 100,
+                                    'required' => "",
+                                    'value' => set_value('email') ? set_value('email') : (isset($data['email']) ? $data['email'] : '')
+                                ]); ?>
+                                <?= form_error('email') ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <?= form_label('Password', 'password', 'class="col-form-label"') ?>
                                 <?= form_input([
                                     'class' => "form-control",
                                     'id' => "password",
                                     'name' => "password",
+                                    'type' => "password",
                                     'maxlength' => 100,
                                     isset($data['password']) ? 'required' : '',
                                 ]); ?>
                                 <?= form_error('password') ?>
+                            </div>
+                        </div>
+                        <div class="col-md-<?= isset($data['logo']) ? 5 : 6 ?>">
+                            <div class="form-group">
+                                <?= form_label('Logo', 'logo', 'class="col-form-label"') ?>
+                                <br>
+                                <?= form_input([
+                                    'class' => "",
+                                    'id' => "logo",
+                                    'name' => "logo",
+                                    'type' => "file",
+                                    'accept' => "image/jpg, image/jpeg, image/png",
+                                    isset($data['logo']) ? 'required' : '',
+                                ]); ?>
+                            </div>
+                        </div>
+                        <?php if(isset($data['logo'])): ?>
+                            <div class="col-md-1">
+                                <?= img($this->path.$data['logo'], '', 'height="100" width="100%"') ?>
+                            </div>
+                        <?php endif ?>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <?= form_label('Address', 'address', 'class="col-form-label"') ?>
+                                <?= form_textarea([
+                                    'class' => "form-control",
+                                    'id' => "address",
+                                    'name' => "address",
+                                    'maxlength' => 255,
+                                    'required' => "",
+                                    'value' => set_value('address') ? set_value('address') : (isset($data['address']) ? $data['address'] : '')
+                                ]); ?>
+                                <?= form_error('address') ?>
                             </div>
                         </div>
                         <div class="col-12"></div>

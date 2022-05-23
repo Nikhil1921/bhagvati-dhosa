@@ -15,6 +15,7 @@
                                 <th>NAME</th>
                                 <th>CONTACT PERSON</th>
                                 <th>MOBILE</th>
+                                <th>EMAIL</th>
                                 <th class="target">ACTION</th>
                             </tr>
                         </thead>
