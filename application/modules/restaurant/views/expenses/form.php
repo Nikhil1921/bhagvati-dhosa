@@ -10,60 +10,44 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= form_label('Your Name', 'name', 'class="col-form-label"') ?>
+                                <?= form_label('Expense Item', 'expense', 'class="col-form-label"') ?>
                                 <?= form_input([
                                     'class' => "form-control solid",
-                                    'type' => "text",
-                                    'id' => "name",
-                                    'name' => "name",
-                                    'maxlength' => 255,
+                                    'id' => "expense",
+                                    'name' => "expense",
+                                    'maxlength' => 100,
                                     'required' => "",
-                                    'value' => $this->user->name
+                                    'value' => set_value('expense') ? set_value('expense') : (isset($data['expense']) ? $data['expense'] : '')
                                 ]); ?>
-                                <?= form_error('name') ?>
+                                <?= form_error('expense') ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= form_label('Your Email', 'email', 'class="col-form-label"') ?>
+                                <?= form_label('Expense price', 'price', 'class="col-form-label"') ?>
                                 <?= form_input([
                                     'class' => "form-control solid",
-                                    'type' => "email",
-                                    'id' => "email",
-                                    'name' => "email",
-                                    'maxlength' => 255,
+                                    'id' => "price",
+                                    'name' => "price",
+                                    'maxlength' => 9,
                                     'required' => "",
-                                    'value' => $this->user->email
+                                    'value' => set_value('price') ? set_value('price') : (isset($data['price']) ? $data['price'] : '')
                                 ]); ?>
-                                <?= form_error('email') ?>
+                                <?= form_error('price') ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= form_label('Your Mobile', 'mobile', 'class="col-form-label"') ?>
+                                <?= form_label('Expense date', 'created_at', 'class="col-form-label"') ?>
                                 <?= form_input([
                                     'class' => "form-control solid",
-                                    'type' => "text",
-                                    'id' => "mobile",
-                                    'name' => "mobile",
-                                    'maxlength' => 10,
+                                    'type' => 'date',
+                                    'id' => "created_at",
+                                    'name' => "created_at",
                                     'required' => "",
-                                    'value' => $this->user->mobile
+                                    'value' => set_value('created_at') ? set_value('created_at') : (isset($data['created_at']) ? date('Y-m-d', $data['created_at']) : '')
                                 ]); ?>
-                                <?= form_error('mobile') ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <?= form_label('Password', 'password', 'class="col-form-label"') ?>
-                                <?= form_input([
-                                    'class' => "form-control solid",
-                                    'type' => "password",
-                                    'id' => "password",
-                                    'name' => "password",
-                                    'maxlength' => 255
-                                ]); ?>
-                                <?= form_error('password') ?>
+                                <?= form_error('created_at') ?>
                             </div>
                         </div>
                         <div class="col-12"></div>

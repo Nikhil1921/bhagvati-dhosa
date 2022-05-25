@@ -12,7 +12,7 @@
                             <div class="form-group">
                                 <?= form_label('Restaurant name', 'name', 'class="col-form-label"') ?>
                                 <?= form_input([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'id' => "name",
                                     'name' => "name",
                                     'maxlength' => 255,
@@ -26,7 +26,7 @@
                             <div class="form-group">
                                 <?= form_label('Contact person', 'c_name', 'class="col-form-label"') ?>
                                 <?= form_input([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'id' => "c_name",
                                     'name' => "c_name",
                                     'maxlength' => 100,
@@ -40,7 +40,7 @@
                             <div class="form-group">
                                 <?= form_label('Mobile', 'mobile', 'class="col-form-label"') ?>
                                 <?= form_input([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'id' => "mobile",
                                     'name' => "mobile",
                                     'maxlength' => 10,
@@ -54,7 +54,7 @@
                             <div class="form-group">
                                 <?= form_label('Email', 'email', 'class="col-form-label"') ?>
                                 <?= form_input([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'id' => "email",
                                     'type' => "email",
                                     'name' => "email",
@@ -69,7 +69,7 @@
                             <div class="form-group">
                                 <?= form_label('Password', 'password', 'class="col-form-label"') ?>
                                 <?= form_input([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'id' => "password",
                                     'name' => "password",
                                     'type' => "password",
@@ -84,7 +84,7 @@
                                 <?= form_label('Logo', 'logo', 'class="col-form-label"') ?>
                                 <br>
                                 <?= form_input([
-                                    'class' => "",
+                                    'class' => "form-control solid",
                                     'id' => "logo",
                                     'name' => "logo",
                                     'type' => "file",
@@ -102,7 +102,7 @@
                             <div class="form-group">
                                 <?= form_label('Address', 'address', 'class="col-form-label"') ?>
                                 <?= form_textarea([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'id' => "address",
                                     'name' => "address",
                                     'maxlength' => 255,

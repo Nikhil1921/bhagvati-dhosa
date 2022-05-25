@@ -18,9 +18,9 @@ class Home extends Admin_controller  {
     {
         if ($this->form_validation->run('profile') == FALSE)
         {
-            $data['title'] = 'profile';
-            $data['name'] = 'dashboard';
-            $data['operation'] = 'update';
+            $data['title'] = 'Profile';
+            $data['name'] = 'profile';
+            $data['operation'] = 'Update';
             $data['url'] = $this->redirect;
 
             return $this->template->load('template', 'profile', $data);

@@ -62,6 +62,10 @@ const table = $('.datatables').DataTable({
     }, ]
 });
 
+$("select[name='status']").change(function () {
+    table.ajax.reload();
+});
+
 const script = {
     delete: function(id) {
         swal({

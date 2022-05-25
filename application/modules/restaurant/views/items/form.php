@@ -10,60 +10,55 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= form_label('Your Name', 'name', 'class="col-form-label"') ?>
-                                <?= form_input([
-                                    'class' => "form-control solid",
-                                    'type' => "text",
-                                    'id' => "name",
-                                    'name' => "name",
-                                    'maxlength' => 255,
-                                    'required' => "",
-                                    'value' => $this->user->name
-                                ]); ?>
-                                <?= form_error('name') ?>
+                                <?= form_label('Category', 'c_id', 'class="col-form-label"') ?>
+                                <select name="c_id" id="c_id" class="form-control solid">
+                                    <option value="">Select Category</option>
+                                    <?php foreach($this->cats as $cat): ?>
+                                        <option value="<?= e_id($cat['id']) ?>" <?= set_value('c_id') ? set_select('c_id', e_id($cat['id'])) : (isset($data['c_id']) && $data['c_id'] === $cat['id'] ? 'selected' : '') ?>><?= $cat['c_name'] ?></option>
+                                    <?php endforeach ?> 
+                                </select>
+                                <?= form_error('c_id') ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= form_label('Your Email', 'email', 'class="col-form-label"') ?>
+                                <?= form_label('Item name', 'i_name', 'class="col-form-label"') ?>
                                 <?= form_input([
                                     'class' => "form-control solid",
-                                    'type' => "email",
-                                    'id' => "email",
-                                    'name' => "email",
-                                    'maxlength' => 255,
+                                    'id' => "i_name",
+                                    'name' => "i_name",
+                                    'maxlength' => 100,
                                     'required' => "",
-                                    'value' => $this->user->email
+                                    'value' => set_value('i_name') ? set_value('i_name') : (isset($data['i_name']) ? $data['i_name'] : '')
                                 ]); ?>
-                                <?= form_error('email') ?>
+                                <?= form_error('i_name') ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= form_label('Your Mobile', 'mobile', 'class="col-form-label"') ?>
+                                <?= form_label('Item price', 'i_price', 'class="col-form-label"') ?>
                                 <?= form_input([
                                     'class' => "form-control solid",
-                                    'type' => "text",
-                                    'id' => "mobile",
-                                    'name' => "mobile",
-                                    'maxlength' => 10,
+                                    'id' => "i_price",
+                                    'name' => "i_price",
+                                    'maxlength' => 5,
                                     'required' => "",
-                                    'value' => $this->user->mobile
+                                    'value' => set_value('i_price') ? set_value('i_price') : (isset($data['i_price']) ? $data['i_price'] : '')
                                 ]); ?>
-                                <?= form_error('mobile') ?>
+                                <?= form_error('i_price') ?>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <?= form_label('Password', 'password', 'class="col-form-label"') ?>
-                                <?= form_input([
+                                <?= form_label('Item description', 'description', 'class="col-form-label"') ?>
+                                <?= form_textarea([
                                     'class' => "form-control solid",
-                                    'type' => "password",
-                                    'id' => "password",
-                                    'name' => "password",
-                                    'maxlength' => 255
+                                    'id' => "description",
+                                    'name' => "description",
+                                    'required' => "",
+                                    'value' => set_value('description') ? set_value('description') : (isset($data['description']) ? $data['description'] : '')
                                 ]); ?>
-                                <?= form_error('password') ?>
+                                <?= form_error('description') ?>
                             </div>
                         </div>
                         <div class="col-12"></div>

@@ -4,8 +4,32 @@
  */
 class Main_modal extends MY_Model
 {
-    public function bulk_upload($post, $table)
+    public function checkAccess($name, $operation)
     {
-        return $this->db->insert_batch($table, $post);
+        $access = [
+            /* 'category' => [
+                [
+                    'role'      => 'Admin',
+                    'operation' => ['list', 'add_update', 'delete']
+                ],
+                [
+                    'role'      => 'Accountant',
+                    'operation' => ['list']
+                ]
+            ],
+            'items' => [
+                [
+                    'role'      => 'Admin',
+                    'operation' => ['list', 'add_update', 'delete']
+                ]
+            ] */
+        ];
+        
+        if(isset($access[$name]))
+            return array_filter($access[$name], function($ac) use($operation) {
+                return $ac['role'] === $this->user->role && in_array($operation, $ac['operation']) ? true : false;
+            }) ? true : false;
+        else
+            return false;
     }
 }

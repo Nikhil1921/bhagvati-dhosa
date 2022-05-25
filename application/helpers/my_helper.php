@@ -55,6 +55,11 @@ function admin($uri='')
     return ADMIN.'/'.$uri;
 }
 
+function roles()
+{
+    return ['Accountant', 'Shef', 'Captain'];
+}
+
 if ( ! function_exists('convert_webp'))
 {
     function convert_webp($path, $image, $name) {
@@ -81,5 +86,30 @@ if ( ! function_exists('script'))
     function script($url='', $type='application/javascript')
     {
         return "\n<script src=\"".base_url($url)."\" type=\"$type\"></script>\n";
+    }
+}
+
+if ( ! function_exists('check_access'))
+{
+    function check_access($name, $operation)
+    {
+        $CI =& get_instance();
+        
+        if ($CI->user->role === 'Admin')
+            return true;
+        else
+            return $CI->main->checkAccess($name, $operation) ? true : redirect(admin('forbidden'));
+    }
+}
+
+if ( ! function_exists('verify_access'))
+{
+    function verify_access($name, $operation)
+    {
+        $CI =& get_instance();
+        if ($CI->user->role === 'Admin')
+            return true;
+        else
+            return $CI->main->checkAccess($name, $operation);
     }
 }

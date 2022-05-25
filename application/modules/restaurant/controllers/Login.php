@@ -11,7 +11,7 @@ class Login extends MY_Controller
         if ($this->session->auth) return redirect(admin('dashboard'));
 	}
 
-    protected $table = 'restaurants';
+    protected $table = 'employees';
 
 	public function index()
 	{

@@ -12,7 +12,7 @@
                             <div class="form-group">
                                 <?= form_label('Your Name', 'name', 'class="col-form-label"') ?>
                                 <?= form_input([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'type' => "text",
                                     'id' => "name",
                                     'name' => "name",
@@ -27,7 +27,7 @@
                             <div class="form-group">
                                 <?= form_label('Your Email', 'email', 'class="col-form-label"') ?>
                                 <?= form_input([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'type' => "email",
                                     'id' => "email",
                                     'name' => "email",
@@ -42,7 +42,7 @@
                             <div class="form-group">
                                 <?= form_label('Your Mobile', 'mobile', 'class="col-form-label"') ?>
                                 <?= form_input([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'type' => "text",
                                     'id' => "mobile",
                                     'name' => "mobile",
@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <?= form_label('Password', 'password', 'class="col-form-label"') ?>
                                 <?= form_input([
-                                    'class' => "form-control",
+                                    'class' => "form-control solid",
                                     'type' => "password",
                                     'id' => "password",
                                     'name' => "password",

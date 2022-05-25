@@ -6,6 +6,7 @@ class Restaurants extends Admin_controller  {
 	{
 		parent::__construct();
 		$this->path = $this->config->item('restaurants');
+        $this->load->model('Restaurants_model', 'data');
 	}
 
 	private $table = 'restaurants';
@@ -27,7 +28,7 @@ class Restaurants extends Admin_controller  {
     public function get()
     {
         check_ajax();
-        $this->load->model('Restaurants_model', 'data');
+        
         $fetch_data = $this->data->make_datatables();
         $sr = $this->input->get('start') + 1;
         $data = [];
@@ -81,14 +82,13 @@ class Restaurants extends Admin_controller  {
         $data['operation'] = $id === 0 ? "Add" : "Update";
         $data['url'] = $this->redirect;
 
-        if($id !== 0) $data['data'] = $this->main->get($this->table, 'name, c_name, mobile, email, address, logo', ['id' => d_id($id)]);
+        if($id !== 0) $data['data'] = $this->data->get('', 'r.id, r.name, r.address, r.logo, e.name AS c_name, email, mobile', ['e.id' => d_id($id), 'role' => 'Admin']);
         
         if ($this->form_validation->run() == FALSE)
         {
             return $this->template->load('template', "$this->redirect/form", $data);
         }else{
-            if($id === 0)
-            {
+            if($id === 0){
                 $image = $this->uploadImage('logo');
                 if ($image['error'] == TRUE){
                     $this->session->set_flashdata('error', $image["message"]);
@@ -107,21 +107,10 @@ class Restaurants extends Admin_controller  {
                     $img = $this->input->post('logo');
             }
 
-            $post = [
-                'name'    => $this->input->post('name'),
-                'c_name'  => $this->input->post('c_name'),
-                'mobile'  => $this->input->post('mobile'),
-                'address' => $this->input->post('address'),
-                'email'   => $this->input->post('email'),
-                'logo'    => $img
-            ];
-            
-            if ($this->input->post('password'))
-			    $post['password'] = my_crypt($this->input->post('password'));
-                
-            $uid = ($id === 0) ? $this->main->add($post, $this->table) : $this->main->update(['id' => d_id($id)], $post, $this->table);
+            $uid = $this->data->add_update(d_id($id), $img);
+
             $msg = ($id === 0) ? 'added' : 'updated';
-            
+
             if ($id !== 0) {
                 $unlink = $this->input->post('logo');
                 if($uid && $unlink !== $img && is_file($this->path.$unlink))
@@ -140,7 +129,7 @@ class Restaurants extends Admin_controller  {
         if ($this->form_validation->run() == FALSE)
             flashMsg(0, "", "Some required fields are missing.", $this->redirect);
         else{
-            $id = $this->main->update(['id' => d_id($this->input->post('id'))], ['is_deleted' => 0], $this->table);
+            $id = $this->data->delete(d_id($this->input->post('id')), $this->table);
             flashMsg($id, "$this->title deleted.", "$this->title not deleted.", $this->redirect);
         }
     }
@@ -151,7 +140,7 @@ class Restaurants extends Admin_controller  {
         
         $where = ['mobile' => $str, 'id != ' => d_id($id)];
         
-        if ($this->main->check($this->table, $where, 'id'))
+        if ($this->main->check("employees", $where, 'id'))
         {
             $this->form_validation->set_message('mobile_check', 'The %s is already in use');
             return FALSE;
@@ -165,7 +154,7 @@ class Restaurants extends Admin_controller  {
         
         $where = ['email' => $str, 'id != ' => d_id($id)];
         
-        if ($this->main->check($this->table, $where, 'id'))
+        if ($this->main->check("employees", $where, 'id'))
         {
             $this->form_validation->set_message('email_check', 'The %s is already in use');
             return FALSE;
@@ -206,11 +195,11 @@ class Restaurants extends Admin_controller  {
         [
             'field' => 'mobile',
             'label' => 'Mobile no.',
-            'rules' => 'required|exact_length[10]|is_numeric|callback_mobile_check|trim',
+            'rules' => 'required|exact_length[10]|is_natural|callback_mobile_check|trim',
             'errors' => [
                 'required' => "%s is required",
                 'exact_length' => "%s is invalid",
-                'is_numeric' => "%s is invalid",
+                'is_natural' => "%s is invalid",
             ],
         ],
         [

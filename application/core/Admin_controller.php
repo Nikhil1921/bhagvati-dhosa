@@ -17,10 +17,18 @@ class Admin_controller extends MY_Controller
 				break;
 			
 			default:
-				$this->user = (object) $this->main->get("restaurants", 'name, mobile, email', ['id' => $this->session->auth]);
+				$this->user = (object) $this->main->get("employees", 'name, mobile, email, role, res_id', ['id' => $this->session->auth]);
 				break;
 		}
         
 		$this->redirect = admin($this->redirect);
+	}
+
+	public function forbidden()
+	{
+		$data['title'] = 'Error 403';
+        $data['name'] = 'error_403';
+
+		return $this->template->load('template', 'error_403', $data);
 	}
 }

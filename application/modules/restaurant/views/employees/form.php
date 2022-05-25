@@ -10,47 +10,45 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= form_label('Your Name', 'name', 'class="col-form-label"') ?>
+                                <?= form_label('Name', 'name', 'class="col-form-label"') ?>
                                 <?= form_input([
                                     'class' => "form-control solid",
-                                    'type' => "text",
                                     'id' => "name",
                                     'name' => "name",
-                                    'maxlength' => 255,
+                                    'maxlength' => 100,
                                     'required' => "",
-                                    'value' => $this->user->name
+                                    'value' => set_value('name') ? set_value('name') : (isset($data['name']) ? $data['name'] : '')
                                 ]); ?>
                                 <?= form_error('name') ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <?= form_label('Your Email', 'email', 'class="col-form-label"') ?>
+                                <?= form_label('Mobile', 'mobile', 'class="col-form-label"') ?>
                                 <?= form_input([
                                     'class' => "form-control solid",
-                                    'type' => "email",
-                                    'id' => "email",
-                                    'name' => "email",
-                                    'maxlength' => 255,
-                                    'required' => "",
-                                    'value' => $this->user->email
-                                ]); ?>
-                                <?= form_error('email') ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <?= form_label('Your Mobile', 'mobile', 'class="col-form-label"') ?>
-                                <?= form_input([
-                                    'class' => "form-control solid",
-                                    'type' => "text",
                                     'id' => "mobile",
                                     'name' => "mobile",
                                     'maxlength' => 10,
                                     'required' => "",
-                                    'value' => $this->user->mobile
+                                    'value' => set_value('mobile') ? set_value('mobile') : (isset($data['mobile']) ? $data['mobile'] : '')
                                 ]); ?>
                                 <?= form_error('mobile') ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <?= form_label('Email', 'email', 'class="col-form-label"') ?>
+                                <?= form_input([
+                                    'class' => "form-control solid",
+                                    'id' => "email",
+                                    'type' => "email",
+                                    'name' => "email",
+                                    'maxlength' => 100,
+                                    'required' => "",
+                                    'value' => set_value('email') ? set_value('email') : (isset($data['email']) ? $data['email'] : '')
+                                ]); ?>
+                                <?= form_error('email') ?>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -58,13 +56,24 @@
                                 <?= form_label('Password', 'password', 'class="col-form-label"') ?>
                                 <?= form_input([
                                     'class' => "form-control solid",
-                                    'type' => "password",
                                     'id' => "password",
                                     'name' => "password",
-                                    'maxlength' => 255
+                                    'type' => "password",
+                                    'maxlength' => 100,
+                                    isset($data['password']) ? 'required' : '',
                                 ]); ?>
                                 <?= form_error('password') ?>
                             </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <?= form_label('Role', '', 'class="col-form-label"') ?>
+                            <br>
+                            <?php foreach (roles() as $k => $role): ?>
+                                <?= form_label(form_radio([
+                                    'class' => "form-check-input",
+                                    'name'  => 'role'
+                                ], $role, set_value('role') ? set_radio('role', $role) : (isset($data['role']) && $data['role'] === $role ? true : (array_key_first(roles()) === $k ? true : false) ))." $role", '', 'class="form-check-label radio-inline"') ?>
+                            <?php endforeach ?>
                         </div>
                         <div class="col-12"></div>
                         <div class="col-6 col-md-3 pb-3">
