@@ -21,7 +21,7 @@ class API_controller extends MY_Controller
         {
             $key = str_replace('"', "", $headers['Authorization']);
             
-            if (! $k = $this->main->check($this->table, ['id' => $key], 'id'))
+            if (! $k = $this->main->check($this->table, ['id' => $key, 'role' => 'Captain'], 'id'))
             {
                 $response["error"] = true;
                 $response["message"] = "Unauthorized User";

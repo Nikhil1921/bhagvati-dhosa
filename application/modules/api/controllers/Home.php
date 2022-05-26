@@ -59,11 +59,30 @@ class Home extends API_controller {
 			'res_id' => $this->input->get('res_id')
 		];
 
-		$cats = $this->api->getItems($where);
+		$items = $this->api->getItems($where);
 		
-		$response['row'] = $cats;
-		$response['error'] = $cats ? false : true;
-		$response['message'] = $cats ? "Item list success." : "Item list not success.";
+		$response['row'] = $items;
+		$response['error'] = $items ? false : true;
+		$response['message'] = $items ? "Item list success." : "Item list not success.";
+
+		echoRespnse(200, $response);
+	}
+
+	public function get_tables()
+	{
+		get();
+
+		verifyRequiredParams(['res_id']);
+
+		$where = [
+			'res_id' => $this->input->get('res_id')
+		];
+
+		$tables = $this->api->getTables($where);
+		
+		$response['row'] = $tables;
+		$response['error'] = $tables ? false : true;
+		$response['message'] = $tables ? "Tables list success." : "Tables list not success.";
 
 		echoRespnse(200, $response);
 	}
