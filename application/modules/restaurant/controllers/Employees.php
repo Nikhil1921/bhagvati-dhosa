@@ -39,6 +39,7 @@ class Employees extends Admin_controller  {
             $sub_array[] = $row->name;
             $sub_array[] = $row->mobile;
             $sub_array[] = $row->email;
+            $sub_array[] = $row->role;
 
             $action = '<div class="basic-dropdown">
                         <div class="dropdown">

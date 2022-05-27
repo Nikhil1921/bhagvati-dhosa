@@ -6,9 +6,9 @@
 class Employees_model extends MY_Model
 {
 	public $table = "employees e";
-	public $select_column = ['e.id', 'e.name', 'e.mobile', 'e.email'];
-	public $search_column = ['e.name', 'e.mobile', 'e.email'];
-    public $order_column = [null, 'e.name', 'e.mobile', 'e.email', null];
+	public $select_column = ['e.id', 'e.name', 'e.mobile', 'e.email', 'e.role'];
+	public $search_column = ['e.name', 'e.mobile', 'e.email', 'e.role'];
+    public $order_column = [null, 'e.name', 'e.mobile', 'e.email', 'e.role', null];
 	public $order = ['e.id' => 'DESC'];
 
 	public function make_query()
