@@ -45,7 +45,7 @@ class Orders extends API_controller {
 
     public $add_order = [
         [
-            'field' => 't_id',
+            'field' => 't_id[]',
             'label' => 'Table ID',
             'rules' => 'required|is_natural|trim',
             'errors' => [
@@ -54,7 +54,7 @@ class Orders extends API_controller {
             ],
         ],
         [
-            'field' => 'i_id',
+            'field' => 'i_id[]',
             'label' => 'Item ID',
             'rules' => 'required|is_natural|trim',
             'errors' => [
@@ -63,7 +63,7 @@ class Orders extends API_controller {
             ],
         ],
         [
-            'field' => 'qty',
+            'field' => 'qty[]',
             'label' => 'Quantity',
             'rules' => 'required|is_natural|trim',
             'errors' => [
@@ -72,7 +72,7 @@ class Orders extends API_controller {
             ],
         ],
         [
-            'field' => 'price',
+            'field' => 'price[]',
             'label' => 'Price',
             'rules' => 'required|is_natural|trim',
             'errors' => [

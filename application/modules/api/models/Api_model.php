@@ -55,15 +55,14 @@ class Api_model extends MY_Model
     public function addOrder($post)
     {
         $or_id = $this->db->select('(count(id) + 1) AS total')
-                 ->from('orders')
-                 ->where(['is_deleted' => 0])
-                 ->where('created_date', date('Y-m-d'))
-                 ->get()
-                 ->row();
-        
+                          ->from('orders')
+                          ->where(['is_deleted' => 0])
+                          ->where('created_date', date('Y-m-d'))
+                          ->get()
+                          ->row();
+                          
         $order = [
-            't_id'       => $post['t_id'],
-            'or_id'      => date('dmY').$or_id->total,
+            'or_id'        => date('dmY').$or_id->total,
             'created_date' => date('Y-m-d'),
             'created_time' => date('H:i:s')
         ];
@@ -73,17 +72,24 @@ class Api_model extends MY_Model
         $this->db->insert('orders', $order);
         $or = $this->db->insert_id();
 
-        $i_o = [
-            'or_id'  => $or,
-            'i_id'  => $post['i_id'],
-            'qty'  => $post['qty'],
-            'price'  => $post['price'],
-            'e_id'  => $this->api
-        ];
+        $tabs = array_map(function($t) use ($or) {
+            $this->db->update('tables', ['is_booked' => 1], ['id' => $t]);
+            return ['t_id' => $t, 'o_id' => $or];
+        }, $post['t_id']);
 
-        $this->db->insert('item_orders', $i_o);
+        $this->db->insert_batch('table_orders', $tabs);
 
-        $this->db->update('tables', ['is_booked' => 1], ['id' => $post['t_id']]);
+        foreach ($post['i_id'] as $k => $i) {
+            $i_o[] = [
+                'or_id'  => $or,
+                'i_id'  => $i,
+                'qty'  => $post['qty'][$k],
+                'price'  => $post['price'][$k],
+                'e_id'  => $this->api
+            ];
+        }
+
+        $this->db->insert_batch('item_orders', $i_o);
 
         $this->db->trans_complete();
 		
@@ -92,11 +98,32 @@ class Api_model extends MY_Model
 
     public function ordersList($get)
     {
-        return $this->db->select('*')
-                        ->from('orders')
-                        /* ->where(['is_deleted' => 0])
-                        ->where('created_date', $get['date']) */
-                        ->get()
-                        ->result();
+        $orders = $this->db->select('to.o_id, o.or_id, o.status, o.pay_status, o.created_date, o.created_time')
+                            ->from('table_orders to')
+                            ->join('orders o', 'to.o_id = o.id')
+                            ->group_by('to.o_id')
+                            ->get()
+                            ->result();
+                            
+        $orders = array_map(function($order){
+
+            $order->items = $this->db->select('io.id, io.price, io.qty, io.i_id, io.status, i.i_name')
+                                     ->from('item_orders io')
+                                     ->where(['io.or_id' => $order->o_id])
+                                     ->join('food_items i', 'i.id = io.i_id')
+                                     ->get()
+                                     ->result();
+
+            $order->tables = $this->db->select('t_name')
+                                     ->from('table_orders to')
+                                     ->where(['to.o_id' => $order->o_id])
+                                     ->join('tables t', 't.id = to.t_id')
+                                     ->get()
+                                     ->result();
+            return $order;
+
+        }, $orders);
+
+        return $orders;
     }
 }
