@@ -24,6 +24,7 @@
                                 <th class="target">SR. NO.</th>
                                 <th>NAME</th>
                                 <th>PRICE</th>
+                                <th>WAITING TIME</th>
                                 <th>CATEGORY</th>
                                 <th class="target">ACTION</th>
                             </tr>

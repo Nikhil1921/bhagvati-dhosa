@@ -48,6 +48,20 @@
                                 <?= form_error('i_price') ?>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <?= form_label('Waiting Time', 'wait_time', 'class="col-form-label"') ?>
+                                <?= form_input([
+                                    'class' => "form-control solid",
+                                    'id' => "wait_time",
+                                    'name' => "wait_time",
+                                    'maxlength' => 2,
+                                    'required' => "",
+                                    'value' => set_value('wait_time') ? set_value('wait_time') : (isset($data['wait_time']) ? $data['wait_time'] : '')
+                                ]); ?>
+                                <?= form_error('wait_time') ?>
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <?= form_label('Item description', 'description', 'class="col-form-label"') ?>

@@ -6,9 +6,9 @@
 class Items_model extends MY_Model
 {
 	public $table = "food_items i";
-	public $select_column = ['i.id', 'i.i_name', 'i.i_price', 'c.c_name'];
-	public $search_column = ['i.i_name', 'i.i_price', 'c.c_name'];
-    public $order_column = [null, 'i.i_name', 'i.i_price', 'c.c_name', null];
+	public $select_column = ['i.id', 'i.i_name', 'i.i_price', 'i.wait_time', 'c.c_name'];
+	public $search_column = ['i.i_name', 'i.i_price', 'i.wait_time', 'c.c_name'];
+    public $order_column = [null, 'i.i_name', 'i.i_price', 'i.wait_time', 'c.c_name', null];
 	public $order = ['i.id' => 'DESC'];
 
 	public function make_query()

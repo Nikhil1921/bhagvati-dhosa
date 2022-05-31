@@ -43,6 +43,7 @@ class Items extends Admin_controller  {
             $sub_array[] = $sr;
             $sub_array[] = $row->i_name;
             $sub_array[] = $row->i_price;
+            $sub_array[] = $row->wait_time;
             $sub_array[] = $row->c_name;
 
             $action = '<div class="basic-dropdown">
@@ -89,7 +90,7 @@ class Items extends Admin_controller  {
         $data['operation'] = $id === 0 ? "Add" : "Update";
         $data['url'] = $this->redirect;
 
-        if($id !== 0) $data['data'] = $this->main->get($this->table, 'i_name, i_price, description, c_id', ['id' => d_id($id)]);
+        if($id !== 0) $data['data'] = $this->main->get($this->table, 'i_name, i_price, description, c_id, wait_time', ['id' => d_id($id)]);
         
         if ($this->form_validation->run() == FALSE)
         {
@@ -99,6 +100,7 @@ class Items extends Admin_controller  {
                 'i_name'       => $this->input->post('i_name'),
                 'i_price'      => $this->input->post('i_price'),
                 'description'  => $this->input->post('description'),
+                'wait_time'    => $this->input->post('wait_time'),
                 'c_id'         => d_id($this->input->post('c_id')),
                 'res_id'       => $this->user->res_id
             ];

@@ -30,7 +30,7 @@ class Home extends Admin_controller  {
             $post = [
     			'mobile'   	 => $this->input->post('mobile'),
     			'email'   	 => $this->input->post('email'),
-    			'c_name'   	 => $this->input->post('name')
+    			'name'   	 => $this->input->post('name')
     		];
 
             if ($this->input->post('password'))
