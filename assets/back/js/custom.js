@@ -311,7 +311,7 @@
 		'use strict';
 		/* masonry by  = bootstrap-select.min.js */
 		if(jQuery('#masonry, .masonry').length > 0)
-			{
+		{
 			var self = jQuery("#masonry, .masonry");
 	 
 			if(jQuery('.card-container').length > 0)
@@ -325,7 +325,7 @@
 				var columnWidthValue = (self.attr('data-column-width') === undefined)?'':self.attr('data-column-width');
 				if(columnWidthValue != ''){columnWidthValue = parseInt(columnWidthValue);}
 				
-				 self.imagesLoaded(function () {
+				 /* self.imagesLoaded(function () {
 					self.masonry({
 						//gutter: gutter,
 						//columnWidth:columnWidthValue, 
@@ -335,7 +335,7 @@
 						//percentPosition: true
 					});
 					
-				}); 
+				});  */
 			} 
 		}
 		if(jQuery('.filters').length)
@@ -468,6 +468,199 @@ jQuery(window).on('resize',function () {
 /*  Window Resize END */
 
 /*  Custom code START */
+
+const base_url = $("#base_url").val();
+
+const showItemList = (className) => {
+	$(".active").removeClass("active");
+  	$(".active-" + className).addClass("active");
+	$("#products-list").children().not("." + className).fadeOut('fast', function(){
+		$("." + className).fadeIn('fast');
+	});
+};
+
+const viewItemDetails = (id) => {
+	const details = $(`input[name=${id}]`).val();
+	$('#item-details').html(details);
+	$("#itemDetailsModal").modal("show");
+};
+
+var ajaxReq = "ToCancelPrevReq";
+
+const saveToCart = () => {
+	const items = JSON.parse(localStorage.getItem("cart"));
+	
+	if(items !== null)
+	{
+		ajaxReq = $.ajax({
+			url: `${base_url}saveToCart`,
+			method: 'POST',
+			data: {items: items},
+			beforeSend : function(){
+				if (ajaxReq != 'ToCancelPrevReq' && ajaxReq.readyState < 4) {
+					ajaxReq.abort();
+				}
+			}
+		});
+	}
+};
+
+const addItem = (id) => {
+	let myCart = JSON.parse(localStorage.getItem("cart"));
+	
+	if (myCart && myCart.length > 0)
+		myCart.push({
+				'item' : id,
+				'qty' : 1
+			});
+	else
+		myCart = [{
+			'item' : id,
+			'qty' : 1
+		}];
+
+	localStorage.setItem("cart", JSON.stringify(myCart));
+	showItems();
+};
+
+const clearItems = () => {
+	localStorage.setItem("cart", JSON.stringify([]));
+};
+
+
+const updateItem = (id, qty) => {
+	let myCart = JSON.parse(localStorage.getItem("cart"));
+
+	myCart = myCart.filter(function(item){
+		if (id == item.item)
+		{
+			if (qty > 0){
+				item.qty = qty;
+				return item;
+			}else{
+				if ($(`#remove-${item.item}`).length > 0) 
+					$(`#remove-${item.item}`).remove();
+				else{
+					let html;
+					html = `
+						<a href="javascript:;" onclick="addItem('${item.item}');" class="btn btn-warning light btn-xs btn-rounded ms-1 d-inline-block"><i class="fa fa-plus"></i></a>
+						<a href="javascript:;" onclick="viewItemDetails('item-details-${item.item}');" class="btn btn-danger light btn-xs btn-rounded ms-1 d-inline-block"><i class="fa fa-eye"></i></a>
+					`;
+					$(`#item-${item.item}`).html(html);
+				}
+				return;
+			}
+		}else
+			return item;
+	});
+
+	if (window.location.href.indexOf("cart") !== -1 && myCart.length <= 0)
+	{
+		$("#products-list").html(`<tr class="">
+			<td colspan="7" class="text-center"><span class="font-w500">No products available.</span></td>
+		</tr>`);
+	}
+
+	localStorage.setItem("cart", JSON.stringify(myCart));
+  	showItems();
+};
+
+const showItems = () => {
+	const items = JSON.parse(localStorage.getItem("cart"));
+	
+	if(items && items.length > 0)
+	{
+		let html;
+		$.each(items, function (index, item){
+			html = `
+				<a href="javascript:;" onclick="updateItem(${item.item}, ${item.qty - 1});" class="btn btn-warning light btn-rounded btn-xxs"><i class="fa fa-minus"></i></a>
+				<span class="p-2" id="qty-${item.item}">${item.qty}</span>
+				<a href="javascript:;" onclick="updateItem(${item.item}, ${item.qty + 1});" class="btn btn-warning light btn-rounded btn-xxs"><i class="fa fa-plus"></i></a>
+			`;
+			$(`#item-${item.item}`).html(html);
+			$(`#place-order`).fadeIn('slow');
+		});
+	}else
+		$(`#place-order`).fadeOut('fast');
+
+	saveToCart();
+};
+
+const checkRemarks = (id) => {
+	$("#item-id").val(id);
+	const remarks = $(`#item-remarks-${id}`).html();
+	$("#remarks").val(remarks);
+	return;
+};
+
+const addRemarks = () => {
+	const id = $("#item-id").val();
+	const remarks = $("#remarks").val();
+	
+	$(`#item-remarks-${id}`).html(remarks);
+	$("#remarks").val('');
+	$("#addRemarksModal").modal("hide");
+
+	let myCart = JSON.parse(localStorage.getItem("cart"));
+
+	myCart = myCart.filter(function(item){
+		if (id == item.item)
+		{
+			item.remarks = remarks;
+			return item;
+		}else
+			return item;
+	});
+
+	localStorage.setItem("cart", JSON.stringify(myCart));
+	
+	saveToCart();
+};
+
+showItems();
+
+if($('.item-carousel').length > 0)
+{
+	$('.item-carousel').owlCarousel({
+		loop:true,
+		margin:15,
+		nav:true,
+		autoplay:true,
+		dots: false,
+		
+		responsive : {
+			// breakpoint from 0 up
+			0 : {
+				items:2,
+			},
+			// breakpoint from 480 up
+			480 : {
+				items:2,
+			},
+			// breakpoint from 768 up
+			768 : {
+				items:4,
+			}
+		},
+		navText: ['', ''],
+		breackpoint:[
+			
+		]
+	});
+
+	if($(".item-box-check").length > 0)
+	{
+		let className;
+
+		$.each($(".item-box-check"), function (key, item) {
+			if($(item).hasClass('active')) className = $(item).data("class");
+		});
+
+		showItemList(className);
+		showItems();
+	}
+}
+
 const successMsg = (msg) => {
 	toastr.success(msg, "Success : ", {
 		positionClass: "toast-bottom-full-width",
@@ -512,5 +705,7 @@ const errorMsg = (msg) => {
 
 if ($("input[name=error_msg]").val() !== '') errorMsg($("input[name=error_msg]").val());
 if ($("input[name=success_msg]").val() !== '') successMsg($("input[name=success_msg]").val());
+
+if (window.location.href.indexOf("order-success") !== -1) clearItems();
 
 /*  Custom code END */

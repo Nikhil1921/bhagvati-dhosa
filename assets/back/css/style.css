@@ -20828,3 +20828,22 @@ span#counter {
   display: inline-block; }
   .star-rating li i {
     color: gold; }
+
+.minus-btn {
+  border-radius: 50%;
+  padding: 1px;
+  text-align: center;
+  background-color: #3e4de0;
+  cursor: pointer;
+  color: #FFFFFF;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.minus-btn:hover {
+    background-color: #0b1fe5;
+}
+
+.item-box-check {
+  cursor: pointer;
+}

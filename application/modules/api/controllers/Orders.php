@@ -80,5 +80,14 @@ class Orders extends API_controller {
                 'is_natural' => "%s is invalid",
             ],
         ],
+        [
+            'field' => 'res_id',
+            'label' => 'Restaurant ID',
+            'rules' => 'required|is_natural|trim',
+            'errors' => [
+                'required' => "%s is required",
+                'is_natural' => "%s is invalid",
+            ],
+        ],
     ];
 }

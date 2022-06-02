@@ -49,6 +49,19 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <?= form_label('Special item', 'special_item', 'class="col-form-label"') ?>
+                            <div class="form-check custom-checkbox mt-3">
+                                <?= form_checkbox([
+                                    'class' => "form-check-input",
+                                    'id' => "special_item",
+                                    'name' => "special_item",
+                                    'value' => 1,
+                                    'checked' => set_value('special_item') ? set_checkbox('special_item', 1) : (isset($data['special_item']) ? $data['special_item'] : false)
+                                ]); ?>
+                                <label class="form-check-label" for="special_item">Is special item?</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <?= form_label('Waiting Time', 'wait_time', 'class="col-form-label"') ?>
                                 <?= form_input([

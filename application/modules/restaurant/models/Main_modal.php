@@ -32,4 +32,32 @@ class Main_modal extends MY_Model
         else
             return false;
     }
+
+    public function getCurrentOrders($res_id)
+    {
+        $orders = $this->db->select('id, or_id, status, pay_status, created_date, created_time')
+                            ->where(['status' => 'Ongoing'])
+                            ->where(['is_deleted' => 0])
+                            ->where(['res_id' => $res_id])
+                            ->get('orders')
+                            ->result();
+
+        $orders = array_map(function($order){
+            $order->tables = $this->db->select('to.t_id, t.t_name')
+                                        ->where(['to.o_id' => $order->id])
+                                        ->join('tables t', 'to.t_id = t.id')
+                                        ->get('table_orders to')
+                                        ->result();
+
+            $order->items = $this->db->select('io.id, io.i_id, i.i_name, io.qty, io.price, io.pending_qty')
+                                        ->where(['io.or_id' => $order->id])
+                                        ->join('food_items i', 'io.i_id = i.id')
+                                        ->get('item_orders io')
+                                        ->result();
+
+            return $order;
+        }, $orders);
+
+        return $orders;
+    }
 }

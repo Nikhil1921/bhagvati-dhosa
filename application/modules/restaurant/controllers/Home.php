@@ -10,7 +10,8 @@ class Home extends Admin_controller  {
         $data['title'] = 'dashboard';
         $data['name'] = 'dashboard';
         $data['url'] = $this->redirect;
-        
+        $data['orders'] = $this->main->getCurrentOrders($this->user->res_id);
+
         return $this->template->load('template', 'home', $data);
 	}
 
@@ -89,19 +90,5 @@ class Home extends Admin_controller  {
     {
         $this->session->sess_destroy();
         return redirect(admin('login'));
-    }
-
-	public function backup()
-    {
-        // Load the DB utility class
-        $this->load->dbutil();
-        
-        // Backup your entire database and assign it to a variable
-        $backup = $this->dbutil->backup();
-
-        // Load the download helper and send the file to your desktop
-        $this->load->helper('download');
-        force_download(APP_NAME.'.zip', $backup);
-        return redirect(admin());
     }
 }

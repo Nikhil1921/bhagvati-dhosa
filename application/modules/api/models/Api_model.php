@@ -60,9 +60,10 @@ class Api_model extends MY_Model
                           ->where('created_date', date('Y-m-d'))
                           ->get()
                           ->row();
-                          
+        
         $order = [
             'or_id'        => date('dmY').$or_id->total,
+            'res_id'       => $post['res_id'],
             'created_date' => date('Y-m-d'),
             'created_time' => date('H:i:s')
         ];
@@ -84,6 +85,7 @@ class Api_model extends MY_Model
                 'or_id'  => $or,
                 'i_id'  => $i,
                 'qty'  => $post['qty'][$k],
+                'pending_qty' => $post['qty'][$k],
                 'price'  => $post['price'][$k],
                 'e_id'  => $this->api
             ];

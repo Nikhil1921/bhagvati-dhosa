@@ -27,7 +27,7 @@ class Login extends MY_Controller
             $post = [
     			'mobile'   	 => $this->input->post('mobile'),
     			'password'   => my_crypt($this->input->post('password')),
-                'role !='  	 => 'Captain',
+                'role'   	 => 'Captain',
     		];
             
     		$user = $this->main->get($this->table, 'id auth', $post);
@@ -58,8 +58,8 @@ class Login extends MY_Controller
         else
         {
             $post = [
-    			'mobile'   	 => $this->input->post('mobile'),
-                'role !='  	 => 'Captain',
+                'role'   	 => 'Captain',
+    			'mobile'   	 => $this->input->post('mobile')
     		];
             
     		if ($user = $this->main->get($this->table, 'id', $post)) {

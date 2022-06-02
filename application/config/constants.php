@@ -7,6 +7,8 @@ if(strpos(PATH_INFOS, 'adminPanel') !== false)
     define('ADMIN', 'adminPanel');
 else if(strpos(PATH_INFOS, 'restaurant') !== false)
     define('ADMIN', 'restaurant');
+else if(strpos(PATH_INFOS, 'captain') !== false)
+    define('ADMIN', 'captain');
 else
     define('ADMIN', 'restaurant');
 
