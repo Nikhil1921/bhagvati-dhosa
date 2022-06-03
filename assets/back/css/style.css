@@ -20844,6 +20844,34 @@ span#counter {
     background-color: #0b1fe5;
 }
 
+.pending-btn {
+  border-radius: 50%;
+  padding: 1px;
+  text-align: center;
+  background-color: #f72b50;
+  color: #FFFFFF;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.pending-btn:hover {
+    background-color: #ed002b;
+}
+
+.deliver-btn {
+  border-radius: 50%;
+  padding: 1px;
+  text-align: center;
+  background-color: #2bc155;
+  color: #FFFFFF;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.deliver-btn:hover {
+    background-color: #297F00;
+}
+
 .item-box-check {
   cursor: pointer;
 }

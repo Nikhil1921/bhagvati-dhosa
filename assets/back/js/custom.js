@@ -472,7 +472,7 @@ jQuery(window).on('resize',function () {
 const base_url = $("#base_url").val();
 
 const showItemList = (className) => {
-	$(".active").removeClass("active");
+	$(".item-box-check.active").removeClass("active");
   	$(".active-" + className).addClass("active");
 	$("#products-list").children().not("." + className).fadeOut('fast', function(){
 		$("." + className).fadeIn('fast');
@@ -554,7 +554,7 @@ const updateItem = (id, qty) => {
 			return item;
 	});
 
-	if (window.location.href.indexOf("cart") !== -1 && myCart.length <= 0)
+	if ((window.location.href.indexOf("cart") !== -1 || window.location.href.indexOf('add-order') !== -1) && myCart.length <= 0)
 	{
 		$("#products-list").html(`<tr class="">
 			<td colspan="7" class="text-center"><span class="font-w500">No products available.</span></td>

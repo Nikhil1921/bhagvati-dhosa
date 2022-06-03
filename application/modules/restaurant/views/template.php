@@ -13,7 +13,7 @@
         <?= link_tag('assets/back/vendor/sweetalert/css/sweetalert.min.css', 'stylesheet', 'text/css') ?>
         <?php endif ?>
         <?= link_tag('assets/back/vendor/toastr/css/toastr.min.css', 'stylesheet', 'text/css') ?>
-        <?= link_tag('assets/back/css/style.css', 'stylesheet', 'text/css') ?>
+        <?= link_tag('assets/back/css/style.css?v='.time(), 'stylesheet', 'text/css') ?>
     </head>
     <body>
         <div id="preloader">

@@ -43,6 +43,30 @@ class Home extends Admin_controller  {
         }
     }
 
+	public function deliver_item()
+    {
+        $this->form_validation->set_rules('id', 'id', 'required|is_natural');
+
+        if ($this->form_validation->run() == FALSE)
+            flashMsg(0, "", "Some required fields are missing.", $this->redirect);
+        else{
+            $id = $this->main->deliverItem(d_id($this->input->post('id')));
+            flashMsg($id, "Item delivered.", "Item not delivered.", $this->redirect);
+        }
+    }
+
+	public function pay_order()
+    {
+        $this->form_validation->set_rules('id', 'id', 'required|is_natural');
+
+        if ($this->form_validation->run() == FALSE)
+            flashMsg(0, "", "Some required fields are missing.", $this->redirect);
+        else{
+            $id = $this->main->payOrder(d_id($this->input->post('id')));
+            flashMsg($id, "Order paid.", "Order not paid.", $this->redirect);
+        }
+    }
+
 	public function waiting()
     {
         $this->form_validation->set_rules('stove', 'Stove', 'required|less_than_equal_to[128]|is_natural|trim', [
