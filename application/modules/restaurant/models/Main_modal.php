@@ -5,11 +5,11 @@
 class Main_modal extends MY_Model
 {
     public function checkAccess($name, $operation)
-    {
+    { 
         $access = [
             /* 'category' => [
                 [
-                    'role'      => 'Admin',
+                    'role'      => 'Accountant',
                     'operation' => ['list', 'add_update', 'delete']
                 ],
                 [
@@ -22,7 +22,17 @@ class Main_modal extends MY_Model
                     'role'      => 'Admin',
                     'operation' => ['list', 'add_update', 'delete']
                 ]
-            ] */
+            ], */
+            'orders' => [
+                [
+                    'role'      => 'Accountant',
+                    'operation' => ['list']
+                ],
+                [
+                    'role'      => 'Shef',
+                    'operation' => ['list']
+                ]
+            ],
         ];
         
         if(isset($access[$name]))
