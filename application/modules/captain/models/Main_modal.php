@@ -6,8 +6,13 @@ class Main_modal extends MY_Model
 {
     public function getCurrentOrders($res_id)
     {
-        $orders = $this->db->select('o.id, o.or_id, o.status, o.pay_status, o.created_date, o.created_time, SUM(IF(io.status = "Pending", 1, 0)) AS count')
-                            ->where(['o.status' => 'Ongoing'])
+        if($this->input->get('status') && $this->input->get('status') === '1')
+            $status = ['Running'];
+        else
+            $status = ['Running', 'Ongoing'];
+            
+        $orders = $this->db->select('o.id, o.or_id, o.status, o.pay_status, o.created_date, o.created_time, SUM(IF(io.status = "Delivered", 1, 0)) AS count')
+                            ->where_in('o.status', $status)
                             ->where(['o.is_deleted' => 0])
                             ->where(['o.res_id' => $res_id])
                             ->join('item_orders io', 'io.or_id = o.id')
@@ -190,6 +195,40 @@ class Main_modal extends MY_Model
         $this->db->update_batch('item_orders', $items, 'id');
         $this->db->update_batch('tables', $tables, 'id');
         $this->db->where(['id' => $id])->update('orders', ['status' => 'Cancelled']);
+
+        $this->db->trans_complete();
+		
+		return $this->db->trans_status();
+    }
+
+    public function changeTable($o_id)
+    {
+        $book = array_map(function($table) use ($o_id) {
+            return [
+                't_id'   => d_id($table),
+                'o_id'   => $o_id
+            ];
+        }, $this->input->post('tables'));
+
+        $tables = array_merge(array_map(function($table){
+            return [
+                'id'        => $table['t_id'],
+                'is_booked' => 0
+            ];
+        }, $this->getAll('table_orders', 't_id', ['o_id' => $o_id])), array_map(function($table){
+            return [
+                'id'        => d_id($table),
+                'is_booked' => 1
+            ];
+        }, $this->input->post('tables')));
+        
+        $this->db->trans_start();
+
+        $this->db->update_batch('tables', $tables, 'id');
+        
+        $this->db->delete('table_orders', ['o_id' => $o_id]);
+
+        $this->db->insert_batch('table_orders', $book);
 
         $this->db->trans_complete();
 		

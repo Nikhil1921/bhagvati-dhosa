@@ -94,6 +94,29 @@ class Home extends Admin_controller  {
         }
     }
 
+	public function change_table($id)
+    {
+        $this->form_validation->set_rules('tables[]', 'Table', 'required', ['required' => "Select at least one %s"]);
+
+        if ($this->form_validation->run() == FALSE)
+        {
+            $data['title'] = 'cart';
+            $data['name'] = 'dashboard';
+            $data['url'] = $this->redirect;
+            $data['cart'] = $this->main->getCart();
+            $data['tables'] = $this->main->getAll('tables', 'id, t_name', ['res_id' => $this->user->res_id, 'is_booked' => 0, 'is_deleted' => 0]);
+            
+            return $this->template->load('template', 'change_table', $data);
+        }else{
+            $c_id = $this->main->changeTable(d_id($id));
+
+            if($c_id)
+                return redirect(admin("table-success"));
+            else
+                flashMsg($c_id, "", "Change table is not successful.. Try again.", admin('change-table/'.$id));
+        }
+    }
+
 	public function order_success()
     {
         $data['title'] = 'Order success';
@@ -101,6 +124,15 @@ class Home extends Admin_controller  {
         $data['url'] = $this->redirect;
 
         return $this->template->load('template', 'order_success', $data);
+    }
+
+	public function table_success()
+    {
+        $data['title'] = 'Table change success';
+        $data['name'] = 'dashboard';
+        $data['url'] = $this->redirect;
+
+        return $this->template->load('template', 'table_success', $data);
     }
 
     public function cancel_item()

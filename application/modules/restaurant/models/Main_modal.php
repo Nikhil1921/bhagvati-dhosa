@@ -45,12 +45,20 @@ class Main_modal extends MY_Model
 
     public function getCurrentOrders($res_id)
     {
-        $this->db->select('o.id, o.or_id, o.status, o.pay_status, o.created_date, o.created_time')
-                            ->where(['o.status' => 'Ongoing'])
-                            ->where(['o.is_deleted' => 0])
-                            ->where(['o.is_deleted' => 0]);
+        if($this->input->get('status') && $this->input->get('status') === '1')
+            $status = ['Running'];
+        elseif($this->user->role === 'Shef')
+            $status = ['Ongoing'];
+        /* elseif($this->user->role === 'Accountant')
+            $status = ['Completed']; */
+        else
+            $status = ['Running', 'Ongoing'];
 
-        if($this->user->role === 'Shef') $this->db->join('item_orders io', 'io.or_id = o.id')->where(['io.status' => 'Pending'])->group_by('o.id');
+        $this->db->select('o.id, o.or_id, o.status, o.pay_status, o.created_date, o.created_time')
+                 ->where_in('o.status', $status)
+                 ->where(['o.is_deleted' => 0]);
+
+        if($this->user->role === '') $this->db->join('item_orders io', 'io.or_id = o.id')->where(['io.status' => 'Pending'])->group_by('o.id');
 
         $orders = $this->db->get('orders o')->result();
         
@@ -76,14 +84,19 @@ class Main_modal extends MY_Model
 
     public function deliverItem($id)
     {
-        $item = $this->get('item_orders', 'qty, pending_qty', ['id' => $id]);
+        $item = $this->get('item_orders', 'qty, pending_qty, or_id', ['id' => $id]);
         
         if($item && $item['pending_qty'] > 0){
             $post['pending_qty'] = $item['pending_qty'] - 1;
 
             if($post['pending_qty'] === 0) $post['status'] = "Delivered";
 
-            return $this->update(['id' => $id], $post, 'item_orders');
+            $u_id = $this->update(['id' => $id], $post, 'item_orders');
+            
+            if($u_id && ! $this->get('item_orders', 'or_id', ['or_id' => $item['or_id'], 'status' => 'Pending']))
+                $this->update(['id' => $item['or_id']], ['status' => "Running"], 'orders');
+
+            return $u_id;
         }else
             return false;
     }

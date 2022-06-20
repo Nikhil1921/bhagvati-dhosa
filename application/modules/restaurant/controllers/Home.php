@@ -48,10 +48,10 @@ class Home extends Admin_controller  {
         $this->form_validation->set_rules('id', 'id', 'required|is_natural');
 
         if ($this->form_validation->run() == FALSE)
-            flashMsg(0, "", "Some required fields are missing.", $this->redirect);
+            flashMsg(0, "", "Some required fields are missing.", "$this->redirect?status=".($this->input->get('status') ? $this->input->get('status') : 0));
         else{
             $id = $this->main->deliverItem(d_id($this->input->post('id')));
-            flashMsg($id, "Item delivered.", "Item not delivered.", $this->redirect);
+            flashMsg($id, "Item delivered.", "Item not delivered.", "$this->redirect?status=".($this->input->get('status') ? $this->input->get('status') : 0));
         }
     }
 

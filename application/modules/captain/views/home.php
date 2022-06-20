@@ -14,6 +14,13 @@
                     <?php endforeach ?>
                 </div>
             </div>
+            
+            <label class="toggle mb-4" for="myToggle">
+                Click for running orders
+                <input class="toggle__input" name="" type="checkbox" id="myToggle" onclick="window.location.href = '<?= base_url(admin('dashboard?status='.($this->input->get('status') === '1' ? 0 : 1))) ?>';" <?= $this->input->get('status') === '1' ? "checked" : '' ?>>
+                <div class="toggle__fill"></div>
+            </label>
+            
             <div class="col-xl-12">
                 <div class="h-100">
                     <div class="card rounded-0">
@@ -62,7 +69,7 @@
             </div>
             <div class="col-xl-12">
                 <div class="row">
-                    <?php if($orders): foreach($orders as $order): if($order->count <= 0) continue ?>
+                    <?php if($orders): foreach($orders as $order): ?>
                     <div class="card-container col-lg-4 col-md-6 col-12">
                         <div class="card shadow-sm">
                             <div class="card-header bg-danger text-white">
@@ -72,6 +79,7 @@
                                     </h4>
                                     <span class="fs-12 op9"><?= $order->or_id ?></span>
                                 </div>
+                                <?php if($order->count <= 0): ?>
                                 <h3 class="text-white">
                                     <?= form_open(admin('cancel-order')) ?>
                                     <?= form_hidden('id', e_id($order->id)) ?>
@@ -81,6 +89,10 @@
                                         'content' => 'CANCEL'
                                     ]); ?>
                                     <?= form_close() ?>
+                                </h3>
+                                <?php endif ?>
+                                <h3 class="text-white">
+                                    <?= anchor(admin('change-table/'.e_id($order->id)), "Change Table", 'class="btn btn-success btn-block col-12 text-white"') ?>
                                 </h3>
                             </div>
                             <div class="card-body">
