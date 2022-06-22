@@ -2,7 +2,7 @@
 /**
  * 
  */
-class Main_modal extends MY_Model
+class Main_modal extends Admin_model
 {
     public function checkAccess($name, $operation)
     { 
@@ -48,19 +48,22 @@ class Main_modal extends MY_Model
         if($this->input->get('status') && $this->input->get('status') === '1')
             $status = ['Running'];
         elseif($this->user->role === 'Shef')
-            $status = ['Ongoing'];
+            // $status = ['Ongoing'];
+            $status = ['Running', 'Ongoing'];
         /* elseif($this->user->role === 'Accountant')
             $status = ['Completed']; */
         else
             $status = ['Running', 'Ongoing'];
 
-        $this->db->select('o.id, o.or_id, o.status, o.pay_status, o.created_date, o.created_time')
+        $this->db->select('o.id, o.or_id, o.status, o.pay_status, o.created_date, o.created_time, SUM(IF(io.status = "Pending", 1, 0)) AS count')
                  ->where_in('o.status', $status)
-                 ->where(['o.is_deleted' => 0]);
+                 ->where(['o.is_deleted' => 0])
+                 ->join('item_orders io', 'io.or_id = o.id')
+                 ->group_by('o.id');
 
-        if($this->user->role === '') $this->db->join('item_orders io', 'io.or_id = o.id')->where(['io.status' => 'Pending'])->group_by('o.id');
+        if($this->user->role === '') $this->db->where(['io.status' => 'Pending']);
 
-        $orders = $this->db->get('orders o')->result();
+        $orders = $this->db->order_by('o.status '.($this->user->role === 'Shef' ? 'ASC' : 'DESC'))->get('orders o')->result();
         
         $orders = array_map(function($order){
             $order->tables = $this->db->select('to.t_id, t.t_name')
@@ -82,41 +85,12 @@ class Main_modal extends MY_Model
         return $orders;
     }
 
-    public function deliverItem($id)
+    public function getOrder($id)
     {
-        $item = $this->get('item_orders', 'qty, pending_qty, or_id', ['id' => $id]);
-        
-        if($item && $item['pending_qty'] > 0){
-            $post['pending_qty'] = $item['pending_qty'] - 1;
-
-            if($post['pending_qty'] === 0) $post['status'] = "Delivered";
-
-            $u_id = $this->update(['id' => $id], $post, 'item_orders');
-            
-            if($u_id && ! $this->get('item_orders', 'or_id', ['or_id' => $item['or_id'], 'status' => 'Pending']))
-                $this->update(['id' => $item['or_id']], ['status' => "Running"], 'orders');
-
-            return $u_id;
-        }else
-            return false;
-    }
-
-    public function payOrder($id)
-    {
-        $tables = array_map(function($table){
-            return [
-                'id'        => $table['t_id'],
-                'is_booked' => 0
-            ];
-        }, $this->getAll('table_orders', 't_id', ['o_id' => $id]));
-
-        $this->db->trans_start();
-        
-        $this->db->update_batch('tables', $tables, 'id');
-        $this->db->where(['id' => $id])->update('orders', ['pay_status' => 'Paid', 'status' => 'Completed']);
-
-        $this->db->trans_complete();
-		
-		return $this->db->trans_status();
+        return $this->db->select('o.or_id, o.pay_status, SUM(io.price * io.qty) as total')
+                        ->where(['o.is_deleted' => 0, 'o.id' => $id])
+                        ->join('item_orders io', 'io.or_id = o.id')
+                        ->group_by('o.id')
+                        ->get('orders o')->row();
     }
 }

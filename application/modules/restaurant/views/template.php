@@ -12,6 +12,9 @@
         <?= link_tag('assets/back/vendor/datatables/css/jquery.dataTables.min.css', 'stylesheet', 'text/css') ?>
         <?= link_tag('assets/back/vendor/sweetalert/css/sweetalert.min.css', 'stylesheet', 'text/css') ?>
         <?php endif ?>
+        <?= link_tag('assets/back/vendor/owl-carousel/owl.carousel.css', 'stylesheet', 'text/css') ?>
+        <?= link_tag('assets/back/vendor/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css', 'stylesheet', 'text/css') ?>
+        <?= link_tag('assets/back/vendor/swiper/css/swiper-bundle.css', 'stylesheet', 'text/css') ?>
         <?= link_tag('assets/back/vendor/toastr/css/toastr.min.css', 'stylesheet', 'text/css') ?>
         <?= link_tag('assets/back/css/style.css?v='.time(), 'stylesheet', 'text/css') ?>
     </head>
@@ -191,6 +194,8 @@
         <?= script("assets/back/vendor/global/global.min.js") ?>
         <!-- Toastr -->
         <?= script("assets/back/vendor/toastr/js/toastr.min.js") ?>
+        <?= script("assets/back/vendor/owl-carousel/owl.carousel.js") ?>
+        <?= script("assets/back/vendor/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js") ?>
         <?= script("assets/back/js/custom.js") ?>
         <?= script("assets/back/js/deznav-init.js") ?>
         <?php if(isset($datatable)): ?>

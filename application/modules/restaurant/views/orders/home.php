@@ -14,6 +14,10 @@
                                 <th>ORDER NO</th>
                                 <th>DATE TIME</th>
                                 <th>PAY STATUS</th>
+                                <?php if($this->user->role !== 'Shef'): ?>
+                                <th>DISCOUNT</th>
+                                <th>TOTAL</th>
+                                <?php endif ?>
                             </tr>
                         </thead>
                         <tbody>

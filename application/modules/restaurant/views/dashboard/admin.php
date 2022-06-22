@@ -8,7 +8,11 @@
                     <div class="card-header bg-danger text-white">
                         <div>
                             <h4 class="text-white">
-                                <?php foreach($order->tables as $table) echo $table->t_name, "<br />"; ?>
+                                <?php 
+                                if($order->tables)
+                                    foreach($order->tables as $table) 
+                                        echo $table->t_name, "<br />";
+                                else echo "Parcel";  ?>
                             </h4>
                             <span class="fs-12 op9"><?= $order->or_id ?></span>
                         </div>
@@ -21,7 +25,7 @@
                                 echo '<li>';
                                 if($item->pending_qty === '0')
                                     echo  "<div class='row'>
-                                                <div class='col-9'><del><span>$item->qty</span>$item->i_name<span>$item->remarks</span></del></div>
+                                                <div class='col-9'><del><span>$item->qty</span>$item->i_name<br /><span>$item->remarks</span></del></div>
                                                 <div class='col-1'><del><span>$item->pending_qty</span></del></div>
                                                 <div class='col-1'>
                                                     <span class='deliver-btn'>D</span>
@@ -29,7 +33,7 @@
                                             </div>";
                                 else
                                     echo  "<div class='row'>
-                                                <div class='col-9'><span>$item->qty</span>$item->i_name<span>$item->remarks</span></div>
+                                                <div class='col-9'><span>$item->qty</span>$item->i_name<br /><span>$item->remarks</span></div>
                                                 <div class='col-1'><span>$item->pending_qty</span></div>
                                                 <div class='col-1'>
                                                     <span class='pending-btn'>P</span>

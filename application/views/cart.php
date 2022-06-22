@@ -74,6 +74,9 @@
                                 'content' => 'Place order'
                             ]); ?>
                         </div>
+                        <div class="col-6 col-md-3 pb-3 pt-3">
+                            <?= anchor(admin('parcel-order'), 'Parcel order', ['class'   => 'btn btn-outline-primary light btn-rounded ms-1 d-inline-block col-12']); ?>
+                        </div>
                     </div>
                 <?= form_close() ?>
             </div>

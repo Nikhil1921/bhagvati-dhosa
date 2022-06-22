@@ -54,12 +54,16 @@
                         <div class="col-6 mt-2">
                             <select name="id" class="form-control">
                                 <?php 
-                                foreach ($orders as $order):
-                                $tabs = '';
-                                foreach ($order->tables as $k => $table): 
-                                    $tabs .= $table->t_name;
-                                    $tabs .= $k !== array_key_last($order->tables) ? ', ' : '';
-                                endforeach; ?>
+                                    foreach ($orders as $order):
+                                    $tabs = '';
+                                    
+                                    if($order->tables)
+                                        foreach ($order->tables as $k => $table): 
+                                            $tabs .= $table->t_name;
+                                            $tabs .= $k !== array_key_last($order->tables) ? ', ' : '';
+                                        endforeach;
+                                    else $tabs .= "Parcel $order->or_id";
+                                ?>
                                     <option value="<?= e_id($order->id) ?>"><?= $tabs ?></option>
                                 <?php endforeach ?>
                             </select>

@@ -11,6 +11,11 @@ class Home extends Admin_controller  {
         $data['name'] = 'dashboard';
         $data['url'] = $this->redirect;
         $data['orders'] = $this->main->getCurrentOrders($this->user->res_id);
+        
+        $data['cats'] = array_map(function($cat){
+            $cat['prods'] = $this->main->getAll('food_items', 'id, i_name, i_price, wait_time, description, IF(special_item = 0, "Normal", "Special") AS special_item', ['c_id' => $cat['id'], 'is_deleted' => 0]);
+            return $cat;
+        }, $this->main->getAll('categories', 'id, c_name', ['res_id' => $this->user->res_id, 'is_deleted' => 0]));
 
         return $this->template->load('template', 'home', $data);
 	}
@@ -43,28 +48,26 @@ class Home extends Admin_controller  {
         }
     }
 
-	public function deliver_item()
+	public function pay_order($id)
     {
-        $this->form_validation->set_rules('id', 'id', 'required|is_natural');
-
-        if ($this->form_validation->run() == FALSE)
-            flashMsg(0, "", "Some required fields are missing.", "$this->redirect?status=".($this->input->get('status') ? $this->input->get('status') : 0));
-        else{
-            $id = $this->main->deliverItem(d_id($this->input->post('id')));
-            flashMsg($id, "Item delivered.", "Item not delivered.", "$this->redirect?status=".($this->input->get('status') ? $this->input->get('status') : 0));
-        }
-    }
-
-	public function pay_order()
-    {
-        $this->form_validation->set_rules('id', 'id', 'required|is_natural');
-
-        if ($this->form_validation->run() == FALSE)
-            flashMsg(0, "", "Some required fields are missing.", $this->redirect);
-        else{
-            $id = $this->main->payOrder(d_id($this->input->post('id')));
-            flashMsg($id, "Order paid.", "Order not paid.", $this->redirect);
-        }
+        $data['title'] = 'Complete order';
+        $data['name'] = 'complete_order';
+        $data['operation'] = 'Complete order';
+        $data['url'] = $this->redirect;
+        $data['data'] = $this->main->getOrder(d_id($id));
+        
+        if($data['data']){
+            $this->form_validation->set_rules('final_total', 'Final Total', 'required|is_natural', ['required' => '%s is required.', 'is_natural' => '%s is invalid.']);
+    
+            if ($this->form_validation->run() === FALSE)
+                return $this->template->load('template', 'pay_order', $data);
+            else{
+                $id = $this->main->payOrder(d_id($id));
+    
+                flashMsg($id, "Order paid.", "Order not paid.", $this->redirect);
+            }
+        }else
+            return $this->error_404();
     }
 
 	public function waiting()
