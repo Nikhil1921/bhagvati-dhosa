@@ -196,6 +196,8 @@
         <?= script("assets/back/vendor/toastr/js/toastr.min.js") ?>
         <?= script("assets/back/vendor/owl-carousel/owl.carousel.js") ?>
         <?= script("assets/back/vendor/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js") ?>
+        <?= script("assets/back/vendor/chart.js/Chart.bundle.min.js") ?>
+        <?= script("assets/back/vendor/apexchart/apexchart.js") ?>
         <?= script("assets/back/js/custom.js") ?>
         <?= script("assets/back/js/deznav-init.js") ?>
         <?php if(isset($datatable)): ?>

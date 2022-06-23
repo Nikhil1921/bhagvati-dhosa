@@ -10,6 +10,7 @@ class Home extends Admin_controller  {
         $data['title'] = 'dashboard';
         $data['name'] = 'dashboard';
         $data['url'] = $this->redirect;
+        $data['total'] = $this->main->totals();
         
         return $this->template->load('template', 'home', $data);
 	}

@@ -121,4 +121,19 @@ class MY_Model extends CI_Model
 	{
 		return $this->db->get_where($table, $where)->num_rows();
 	}
+
+	public function getItemsData($res_id)
+	{
+		return array_map(function($item){
+			$counts = $this->db->select('IF(SUM(qty), SUM(qty), 0) AS sellings, IF(SUM(qty), SUM(qty * price), 0) AS earnings')
+								->get_where('item_orders', ['i_id' => $item['id'], 'status' => 'Delivered'])
+								->row_array();
+
+			$item = array_merge($item, $counts);
+
+			return $item;
+		}, $this->db->select('fi.i_name, fi.id')
+						->get_where('food_items fi', ['fi.res_id' => $res_id])
+						->result_array());
+	}
 }

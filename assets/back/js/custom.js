@@ -488,21 +488,25 @@ const viewItemDetails = (id) => {
 var ajaxReq = "ToCancelPrevReq";
 
 const saveToCart = () => {
-	const items = JSON.parse(localStorage.getItem("cart"));
-	
-	if(items !== null)
+
+	if($("input[name=admin]").length > 0 && $("input[name=admin]").val() === 'captain')
 	{
-		ajaxReq = $.ajax({
-			url: `${base_url}saveToCart`,
-			method: 'POST',
-			data: {items: items},
-			beforeSend : function(){
-				if (ajaxReq != 'ToCancelPrevReq' && ajaxReq.readyState < 4) {
-					ajaxReq.abort();
+		const items = JSON.parse(localStorage.getItem("cart"));
+		
+		if(items !== null)
+		{
+			ajaxReq = $.ajax({
+				url: `${base_url}saveToCart`,
+				method: 'POST',
+				data: {items: items},
+				beforeSend : function(){
+					if (ajaxReq != 'ToCancelPrevReq' && ajaxReq.readyState < 4) {
+						ajaxReq.abort();
+					}
 				}
-			}
-		});
-	}
+			});
+		}
+	}else return;
 };
 
 const addItem = (id) => {
@@ -526,7 +530,6 @@ const addItem = (id) => {
 const clearItems = () => {
 	localStorage.setItem("cart", JSON.stringify([]));
 };
-
 
 const updateItem = (id, qty) => {
 	let myCart = JSON.parse(localStorage.getItem("cart"));
@@ -708,4 +711,192 @@ if ($("input[name=success_msg]").val() !== '') successMsg($("input[name=success_
 
 if (window.location.href.indexOf("order-success") !== -1) clearItems();
 
+const donutChart = () => {
+	
+	$.get(`${base_url}getItemsData`, (data) => {
+
+		data = JSON.parse(data);
+
+		const options = {
+			series: data.series,
+			//colors:['#ff5c5a', '#2bc156', '#404a56'],
+			chart: {
+				height: 330,
+				width:560,
+				type: 'donut',
+				sparkline: {
+					enabled: true,
+				},
+			},
+			labels: data.labels,
+			plotOptions: {
+				pie: {
+					customScale: 1,
+					donut: {
+						size: '50%'
+					}
+				}
+			},
+			legend: {
+				show:true,
+				fontSize: '18px',
+				position: 'right',
+					offsetY: 0,
+					//height: 270,
+					itemMargin: {
+						vertical: 5,
+						horizontal: 5,
+					},
+					markers: {
+						width: 16,
+						height: 16,
+						strokeWidth: 0,
+						radius: 0,
+					},
+			},
+			dataLabels: {
+				enabled: false
+			},
+			responsive: [{
+				breakpoint: 1300,
+				options: {
+					chart: {
+						height: 230,
+						width:400
+					},
+					legend: {
+						fontSize: '14px',
+						itemMargin: {
+							vertical: 0,
+							horizontal: 5,
+						},
+					}
+				}
+			},
+			{
+				breakpoint: 575,
+				options: {
+					chart: {
+						height: 230,
+						width:300
+					},
+					legend: {
+						show:false,
+						fontSize: '14px',
+						itemMargin: {
+							vertical: 0,
+							horizontal: 5,
+						},
+					}
+				}
+			}],
+		};
+	
+		const chart = new ApexCharts(document.querySelector("#chart"), options);
+		
+		chart.render();
+	});
+}
+
+const activityBar = () => {
+
+	const activity = document.getElementById("activity");
+
+	if (activity !== null) {
+		$.get(`${base_url}getItemsData`, (data) => {
+
+			data = JSON.parse(data);
+			let total = 0;
+			
+			$.each(data.earnings, function (index, value) {
+				total += value;
+			});
+
+			activity.height = 260;
+		
+			const config = {
+				type: "bar",
+				data: {
+					labels: data.labels,
+					datasets: [
+						{
+							label: "Total Earning",
+							data:  data.earnings,
+							borderColor: 'rgba(47, 76, 221, 1)',
+							borderWidth: "0",
+							barThickness:'flex',
+							backgroundColor: '#ff6d4d',
+							minBarLength:10
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					
+					legend: {
+						display: false
+					},
+					scales: {
+						yAxes: [{
+							gridLines: {
+								color: "rgba(233,236,255,1)",
+								drawBorder: true
+							},
+							ticks: {
+								fontColor: "#3e4954",
+								max: Math.max(...data.earnings) + 10,
+								min: 0,
+								stepSize: Math.ceil(total / data.earnings.length)
+							},
+						}],
+						xAxes: [{
+							barPercentage: 0.7,
+							
+							gridLines: {
+								display: true,
+								zeroLineColor: "transparent"
+							},
+							ticks: {
+								stepSize: 20,
+								fontColor: "#3e4954",
+								fontFamily: "Nunito, sans-serif"
+							}
+						}]
+					},
+					tooltips: {
+						mode: "index",
+						intersect: false,
+						titleFontColor: "#888",
+						bodyFontColor: "#555",
+						titleFontSize: 12,
+						bodyFontSize: 15,
+						backgroundColor: "rgba(255,255,255,1)",
+						displayColors: true,
+						xPadding: 10,
+						yPadding: 7,
+						borderColor: "rgba(220, 220, 220, 1)",
+						borderWidth: 1,
+						caretSize: 6,
+						caretPadding: 10
+					}
+				}
+			};
+
+			const ctx = document.getElementById("activity").getContext("2d");
+			const myLine = new Chart(ctx, config);
+		});
+	}
+}
+
+const counterBar = () => {
+	$(".counter").counterUp({
+		delay: 30,
+		time: 1500,
+	});
+};
+
+if($("#chart").length > 0) donutChart();
+activityBar();
+counterBar();
 /*  Custom code END */

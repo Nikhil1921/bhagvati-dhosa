@@ -126,6 +126,9 @@
         <?= script("assets/back/vendor/global/global.min.js") ?>
         <!-- Toastr -->
         <?= script("assets/back/vendor/toastr/js/toastr.min.js") ?>
+        <!-- Counter Up -->
+        <?= script("assets/back/vendor/waypoints/jquery.waypoints.min.js") ?>
+        <?= script("assets/back/vendor/jquery.counterup/jquery.counterup.min.js") ?>	
         <?= script("assets/back/js/custom.js") ?>
         <?= script("assets/back/js/deznav-init.js") ?>
         <?php if(isset($datatable)): ?>

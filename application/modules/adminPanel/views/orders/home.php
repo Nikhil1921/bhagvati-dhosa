@@ -15,6 +15,8 @@
                                 <th>ORDER NO</th>
                                 <th>DATE TIME</th>
                                 <th>PAY STATUS</th>
+                                <th>DISCOUNT</th>
+                                <th>TOTAL</th>
                             </tr>
                         </thead>
                         <tbody>

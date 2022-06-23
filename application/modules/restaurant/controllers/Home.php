@@ -113,6 +113,27 @@ class Home extends Admin_controller  {
         }
     }
 
+	public function getItemsData()
+    {
+        check_ajax();
+        
+        $items = $this->main->getItemsData($this->user->res_id);
+        
+        $series = array_map(function($item){
+            return (int) $item['sellings'];
+        }, $items);
+
+        $earnings = array_map(function($item){
+            return (int) $item['earnings'];
+        }, $items);
+
+        $labels = array_map(function($item){
+            return $item['i_name'];
+        }, $items);
+
+        die(json_encode(['series' => $series, 'labels' => $labels, 'earnings' => $earnings]));
+    }
+
 	public function logout()
     {
         $this->session->sess_destroy();

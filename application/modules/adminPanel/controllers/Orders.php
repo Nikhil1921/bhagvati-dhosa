@@ -35,6 +35,8 @@ class Orders extends Admin_controller  {
             $sub_array[] = $row->or_id;
             $sub_array[] = date('d-m-Y', strtotime($row->created_date)) . ' ' . date('h:i A', strtotime($row->created_time));
             $sub_array[] = $row->pay_status;
+            $sub_array[] = "$row->discount %";
+            $sub_array[] = $row->final_total;
             
             $data[] = $sub_array;  
             $sr++;

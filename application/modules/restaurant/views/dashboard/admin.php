@@ -2,6 +2,29 @@
 <div class="content-wrapper">
     <div class="container-fluid">
         <div class="row">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chart" class="d-inline-block donut-chart-d"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div id="user-activity" class="card">
+                    <div class="card-header border-0 pb-0 d-sm-flex d-block">
+                        <div>
+                            <h2 class="main-title mb-1">Earnings</h2>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="user" role="tabpanel">
+                                <canvas id="activity" class="chartjs"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <?php if($orders): foreach($orders as $order): ?>
             <div class="card-container col-lg-4 col-md-6 col-12">
                 <div class="card shadow-sm">
