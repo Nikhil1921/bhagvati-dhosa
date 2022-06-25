@@ -243,6 +243,13 @@ class Admin_model extends MY_Model
         ];
 
         $this->db->where(['id' => $id])->update('orders', $post);
+        
+        $item_orders = [
+            'pending_qty' => 0,
+            'status' => 'Delivered'
+        ];
+
+        $this->db->where(['or_id' => $id, 'status' => 'Pending'])->update('item_orders', $item_orders);
 
         $this->db->trans_complete();
 		

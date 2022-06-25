@@ -190,6 +190,7 @@
         <input type="hidden" name="success_msg" value="<?= $this->session->success ?>" />
         <input type="hidden" id="base_url" value="<?= base_url(admin()) ?>" />
         <input type="hidden" name="admin" value="<?= ADMIN ?>" />
+        <input type="hidden" name="role" value="<?= $this->user->role ?>" />
 
         <?= script("assets/back/vendor/global/global.min.js") ?>
         <!-- Toastr -->

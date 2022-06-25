@@ -76,11 +76,9 @@
                             </h4>
                             <span class="fs-12 op9"><?= $order->or_id ?></span>
                         </div>
-                        <?php if($order->count == 0): ?>
                         <h3 class="text-white">
                             <?= anchor(admin("pay-order/".e_id($order->id)), 'COMPLETE', 'class="btn btn-success btn-block col-12 text-white"') ?>
                         </h3>
-                        <?php endif ?>
                     </div>
                     <div class="card-body">
                         <ul class="order-list">

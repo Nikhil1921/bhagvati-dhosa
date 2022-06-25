@@ -20858,6 +20858,16 @@ span#counter {
     background-color: #ed002b;
 }
 
+.running-btn {
+  border-radius: 50%;
+  padding: 1px;
+  text-align: center;
+  background-color: #2f4cdd;
+  color: #FFFFFF;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .deliver-btn {
   border-radius: 50%;
   padding: 1px;

@@ -489,7 +489,7 @@ var ajaxReq = "ToCancelPrevReq";
 
 const saveToCart = () => {
 
-	if($("input[name=admin]").length > 0 && $("input[name=admin]").val() === 'captain')
+	if($("input[name=admin]").val() === 'captain' || ($("input[name=role]").length > 0 && $("input[name=role]").val() === 'Accountant'))
 	{
 		const items = JSON.parse(localStorage.getItem("cart"));
 		
@@ -506,6 +506,7 @@ const saveToCart = () => {
 				}
 			});
 		}
+
 	}else return;
 };
 
@@ -890,10 +891,11 @@ const activityBar = () => {
 }
 
 const counterBar = () => {
-	$(".counter").counterUp({
-		delay: 30,
-		time: 1500,
-	});
+	if($(".counter").length > 0)
+		$(".counter").counterUp({
+			delay: 30,
+			time: 1500,
+		});
 };
 
 if($("#chart").length > 0) donutChart();

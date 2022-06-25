@@ -27,22 +27,24 @@
                     <div class="card-body">
                         <ul class="order-list">
                             <?php array_walk_recursive($order->items, function($item){
-                                echo '<li>';
+                                
                                 if($item->pending_qty === '0')
-                                    echo  "<div class='row'>
+                                    echo "";
+                                    /* echo  "<div class='row'>
                                                 <div class='col-7'><del><span>$item->qty</span>$item->i_name<br /><span>$item->remarks</span></del></div>
                                                 <div class='col-1'><del><span>$item->pending_qty</span></del></div>
                                                 <div class='col-1'>
                                                     <span class='deliver-btn'>D</span>
                                                 </div>
-                                            </div>";
-                                else
+                                            </div>"; */
+                                else{
+                                    echo '<li>';
                                     echo  "<div class='row'>
                                                 <div class='col-7'><span>$item->qty</span>$item->i_name<br /><span>$item->remarks</span></div>
                                                 <div class='col-1'><span>$item->pending_qty</span></div>
                                                 <div class='col-3'>
                                                     <div class='row'>
-                                                        <div class='col-6'><span class='pending-btn'>".($item->pending_qty !== $item->qty ? 'R' : 'P')."</span></div>
+                                                        <div class='col-6'><span class='".($item->pending_qty !== $item->qty ? 'running' : 'pending')."-btn'>".($item->pending_qty !== $item->qty ? 'P' : 'P')."</span></div>
                                                         <div class='col-6'>
                                                             ".form_open(admin('deliver-item'), 'id="item-deliver-'.e_id($item->id).'"')."
                                                             ".form_hidden('id', e_id($item->id))."
@@ -53,7 +55,8 @@
                                                 </div>
                                             </div>";
                                 
-                                echo '</li>';
+                                    echo '</li>';
+                                }
                             }) ?>
                         </ul>
                     </div>

@@ -35,7 +35,7 @@ class Admin_controller extends MY_Controller
             $data['url'] = $this->redirect;
             $data['cart'] = $this->main->getCart();
             $data['tables'] = $this->main->getAll('tables', 'id, t_name', ['res_id' => $this->user->res_id, 'is_booked' => 0, 'is_deleted' => 0]);
-
+            // re($data);
             return $this->template->load('template', 'cart', $data);
         }else{
             $id = $this->main->saveOrder();
