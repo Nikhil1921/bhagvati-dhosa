@@ -6,7 +6,7 @@
 class Order_model extends MY_Model
 {
 	public $table = "orders o";
-	public $select_column = ['o.id', 'o.or_id', 'o.created_date', 'o.created_time', 'o.pay_status', 'o.discount', 'o.final_total'];
+	public $select_column = ['o.id', 'o.or_id', 'o.created_date', 'o.created_time', 'o.pay_status', 'o.discount', 'o.final_total', 'o.pay_type'];
 	public $search_column = ['o.or_id', 'o.created_date', 'o.created_time', 'o.pay_status', 'o.discount', 'o.final_total'];
     public $order_column = [null, 'o.or_id', 'o.created_date', 'o.pay_status', 'o.discount', 'o.final_total', null];
 	public $order = ['o.id' => 'DESC'];

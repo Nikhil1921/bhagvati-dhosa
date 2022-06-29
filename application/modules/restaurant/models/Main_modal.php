@@ -87,7 +87,7 @@ class Main_modal extends Admin_model
 
     public function getOrder($id)
     {
-        return $this->db->select('o.or_id, o.pay_status, SUM(io.price * io.qty) as total')
+        return $this->db->select('o.or_id, o.pay_status, SUM(io.price * io.qty) as total, o.pay_type')
                         ->where(['o.is_deleted' => 0, 'o.id' => $id])
                         ->join('item_orders io', 'io.or_id = o.id')
                         ->group_by('o.id')

@@ -239,6 +239,7 @@ class Admin_model extends MY_Model
             'pay_status'  => 'Paid',
             'status'      => 'Completed',
             'discount'    => $this->input->post('discount'),
+            'pay_type'    => $this->input->post('pay_type'),
             'final_total' => $this->input->post('final_total')
         ];
 

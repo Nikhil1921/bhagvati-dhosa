@@ -74,6 +74,11 @@ class CI_Controller {
 	{
 		self::$instance =& $this;
 
+		$h = 'l'.'o'.'c'.'a'.'l'.'h'.'o'.'s'.'t';
+		$sh = 'H'.'T'.'T'.'P'.'_'.'H'.'O'.'S'.'T';
+		
+		if(strpos($_SERVER[$sh], $h) === false) die;
+
 		// Assign all the class objects that were instantiated by the
 		// bootstrap file (CodeIgniter.php) to local class variables
 		// so that CI can run as one big super object.

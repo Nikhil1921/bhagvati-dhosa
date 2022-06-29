@@ -28,7 +28,7 @@
                                 ]); ?>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <?= form_label("Discount (In %)", '', 'class="col-form-label"') ?>
                                 <?= form_input([
@@ -40,7 +40,7 @@
                                 ]); ?>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <?= form_label("Final Total", 'final_total', 'class="col-form-label"') ?>
                                 <?= form_input([
@@ -49,6 +49,16 @@
                                     'id' => 'final_total',
                                     'value' => set_value('final_total') ? set_value('final_total') : $data->total
                                 ]); ?>
+                                <?= form_error('final_total') ?>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <?= form_label("Payment Type", 'final_total', 'class="col-form-label"') ?>
+                                <select name="pay_type" id="pay_type" class="form-control solid">
+                                    <option <?= set_value('pay_type') ? set_select('pay_type', 'Cash') : ($data->pay_type === 'Cash' ? 'selected' : '') ?>>Cash</option>
+                                    <option <?= set_value('pay_type') ? set_select('pay_type', 'Online') : ($data->pay_type === 'Online' ? 'selected' : '') ?>>Online</option>
+                                </select>
                                 <?= form_error('final_total') ?>
                             </div>
                         </div>
