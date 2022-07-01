@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?= ucwords($title) ?> | <?= APP_NAME ?></title>
         <?= link_tag('assets/images/favicon.png', 'icon', 'image/png') ?>
-        <?= link_tag('assets/back/css/style.css', 'stylesheet', 'text/css') ?>
+        <?= link_tag('assets/back/css/style.css?v=1.0.1', 'stylesheet', 'text/css') ?>
     </head>
     <body class="h-100">
         <?= $contents ?>

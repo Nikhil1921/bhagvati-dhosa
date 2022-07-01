@@ -804,9 +804,10 @@ const activityBar = () => {
 	const activity = document.getElementById("activity");
 
 	if (activity !== null) {
-		$.get(`${base_url}getItemsData`, (data) => {
+		$.get(`${base_url}getRevenueData`, (data) => {
 
 			data = JSON.parse(data);
+			
 			let total = 0;
 			
 			$.each(data.earnings, function (index, value) {
@@ -818,7 +819,7 @@ const activityBar = () => {
 			const config = {
 				type: "bar",
 				data: {
-					labels: data.labels,
+					labels: data.dates,
 					datasets: [
 						{
 							label: "Total Earning",
@@ -848,7 +849,7 @@ const activityBar = () => {
 								fontColor: "#3e4954",
 								max: Math.max(...data.earnings) + 10,
 								min: 0,
-								stepSize: Math.ceil(total / data.earnings.length)
+								stepSize: Math.ceil(total / data.earnings.length * 15)
 							},
 						}],
 						xAxes: [{

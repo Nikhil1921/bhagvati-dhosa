@@ -11,6 +11,7 @@ class Home extends Admin_controller  {
         $data['name'] = 'dashboard';
         $data['url'] = $this->redirect;
         $data['orders'] = $this->main->getCurrentOrders($this->user->res_id);
+        $data['total'] = $this->main->totals();
         
         $data['cats'] = array_map(function($cat){
             $cat['prods'] = $this->main->getAll('food_items', 'id, i_name, i_price, wait_time, description, IF(special_item = 0, "Normal", "Special") AS special_item', ['c_id' => $cat['id'], 'is_deleted' => 0]);
@@ -48,6 +49,13 @@ class Home extends Admin_controller  {
         }
     }
 
+	public function print($id)
+    {
+        $data['data'] = $this->main->getFullOrder(d_id($id));
+        
+        return $this->load->view('invoice', $data);
+    }
+
 	public function pay_order($id)
     {
         $data['title'] = 'Complete order';
@@ -62,9 +70,9 @@ class Home extends Admin_controller  {
             if ($this->form_validation->run() === FALSE)
                 return $this->template->load('template', 'pay_order', $data);
             else{
-                $id = $this->main->payOrder(d_id($id));
+                $uid = $this->main->payOrder(d_id($id));
     
-                flashMsg($id, "Order paid.", "Order not paid.", $this->redirect);
+                flashMsg($uid, "Order paid.", "Order not paid.", $uid ? admin("print/$id") : $this->redirect);
             }
         }else
             return $this->error_404();
@@ -138,5 +146,17 @@ class Home extends Admin_controller  {
     {
         $this->session->sess_destroy();
         return redirect(admin('login'));
+    }
+
+	public function getRevenueData()
+    {
+        check_ajax();
+        
+        for ($i = 1; $i <= date("t"); $i++) {
+            $response['dates'][] = date("$i-m-Y");
+            $response['earnings'][] = $this->main->daily_totals(date("Y-m-$i"));
+        }
+        
+        die(json_encode($response));
     }
 }

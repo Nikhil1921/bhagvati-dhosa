@@ -17,7 +17,7 @@
         <?= link_tag('assets/back/vendor/datatables/css/jquery.dataTables.min.css', 'stylesheet', 'text/css') ?>
         <?= link_tag('assets/back/vendor/sweetalert/css/sweetalert.min.css', 'stylesheet', 'text/css') ?>
         <?php endif ?>
-        <?= link_tag('assets/back/css/style.css', 'stylesheet', 'text/css') ?>
+        <?= link_tag('assets/back/css/style.css?v=1.0.1', 'stylesheet', 'text/css') ?>
     </head>
     <body>
         <div id="preloader">
@@ -126,11 +126,11 @@
         <!-- Datatable -->
         <?= script("assets/back/vendor/datatables/js/jquery.dataTables.min.js") ?>
         <?= script("assets/back/vendor/sweetalert/js/sweetalert.min.js") ?>
-        <?= script("assets/back/js/datatables.js") ?>
+        <?= script("assets/back/js/datatables.js?v=1.0.1") ?>
         <?php endif ?>
         <!-- Toastr -->
         <?= script("assets/back/vendor/toastr/js/toastr.min.js") ?>
-        <?= script("assets/back/js/custom.js?v=".time()) ?>
+        <?= script("assets/back/js/custom.js?v=1.0.1") ?>
         <?= script("assets/back/js/deznav-init.js") ?>
     </body>
 </html>

@@ -49,6 +49,18 @@ class Home extends Admin_controller  {
         return redirect(admin('login'));
     }
 
+	public function getRevenueData()
+    {
+        check_ajax();
+        
+        for ($i = 1; $i <= date("t"); $i++) {
+            $response['dates'][] = date("$i-m-Y");
+            $response['earnings'][] = $this->main->daily_totals(date("Y-m-$i"));
+        }
+        
+        die(json_encode($response));
+    }
+
 	public function backup()
     {
         // Load the DB utility class

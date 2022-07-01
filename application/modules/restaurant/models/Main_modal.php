@@ -58,6 +58,7 @@ class Main_modal extends Admin_model
         $this->db->select('o.id, o.or_id, o.status, o.pay_status, o.created_date, o.created_time, SUM(IF(io.status = "Pending", 1, 0)) AS count')
                  ->where_in('o.status', $status)
                  ->where(['o.is_deleted' => 0])
+                 ->where(['o.res_id' => $res_id])
                  ->join('item_orders io', 'io.or_id = o.id')
                  ->group_by('o.id');
 
@@ -92,5 +93,65 @@ class Main_modal extends Admin_model
                         ->join('item_orders io', 'io.or_id = o.id')
                         ->group_by('o.id')
                         ->get('orders o')->row();
+    }
+
+    public function getFullOrder($id)
+    {
+        $return = $this->db->select('or_id, status, pay_status, created_date, created_time, discount, final_total, pay_type')
+                           ->where(['is_deleted' => 0, 'id' => $id])
+                           ->get('orders')->row();
+
+        if($return)
+            $return->items = $this->db->select('SUM(io.qty) qty, io.price, fi.i_name')
+                            ->where(['io.status' => 'Delivered', 'io.or_id' => $id])
+                            ->join('food_items AS fi', 'io.i_id = fi.id')
+                            ->group_by('fi.id')
+                            ->get('item_orders AS io')->result();
+
+        return $return;
+    }
+
+    public function totals()
+    {
+        $orders = $this->db->select("SUM(io.qty) AS items_sold, COUNT(DISTINCT o.id) AS orders")
+                           ->from('item_orders io')
+                           ->join('orders o', 'io.or_id = o.id')
+                           ->where(['io.status' => 'Delivered'])
+                           ->where(['o.status' => 'Completed', 'o.pay_status' => 'Paid'])
+                           ->where(['o.res_id' => $this->user->res_id])
+                           ->get()->row_array();
+
+        $revenue = $this->db->select("SUM(o.final_total) AS revenue")
+                            ->from('orders o')
+                            ->where(['o.status' => 'Completed', 'o.pay_status' => 'Paid'])
+                            ->where(['o.res_id' => $this->user->res_id])
+                            ->get()->row_array();
+
+        $expense = $this->db->select("SUM(price) AS expense")
+                            ->from('expenses')
+                            ->where(['is_deleted' => 0])
+                            ->where(['res_id' => $this->user->res_id])
+                            ->get()->row_array();
+                      
+        return array_merge($revenue, $orders, $expense);
+    }
+
+    public function daily_totals($date)
+    {
+        $revenue = $this->db->select("SUM(o.final_total) AS revenue")
+                            ->from('orders o')
+                            ->where(['o.status' => 'Completed', 'o.pay_status' => 'Paid'])
+                            ->where(['o.res_id' => $this->user->res_id])
+                            ->where('created_date', $date)
+                            ->get()->row_array();
+
+        $expense = $this->db->select("SUM(price) AS expense")
+                            ->from('expenses')
+                            ->where(['is_deleted' => 0])
+                            ->where(['created_date' => $date])
+                            ->where(['res_id' => $this->user->res_id])
+                            ->get()->row_array();
+        
+        return $revenue['revenue'] - $expense['expense'];
     }
 }

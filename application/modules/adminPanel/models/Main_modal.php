@@ -11,12 +11,35 @@ class Main_modal extends MY_Model
 
     public function totals()
     {
-        return $this->db->select("COUNT(o.id) AS orders, SUM(io.qty) AS items_sold, SUM(o.final_total) AS revenue")
-                        ->from('orders o')
-                        ->join('item_orders io', 'io.or_id = o.id')
-                        ->where(['io.status' => 'Delivered'])
-                        ->where(['o.status' => 'Completed', 'o.pay_status' => 'Paid'])
-                        ->group_by('o.id')
-                        ->get()->row_array();
+        $orders = $this->db->select("SUM(io.qty) AS items_sold, COUNT(DISTINCT o.id) AS orders")
+                      ->from('item_orders io')
+                      ->join('orders o', 'io.or_id = o.id')
+                      ->where(['io.status' => 'Delivered'])
+                      ->where(['o.status' => 'Completed', 'o.pay_status' => 'Paid'])
+                      ->get()->row_array();
+
+        $revenue = $this->db->select("SUM(o.final_total) AS revenue")
+                      ->from('orders o')
+                      ->where(['o.status' => 'Completed', 'o.pay_status' => 'Paid'])
+                      ->get()->row_array();
+
+        return array_merge($revenue, $orders);
+    }
+
+    public function daily_totals($date)
+    {
+        $revenue = $this->db->select("SUM(o.final_total) AS revenue")
+                            ->from('orders o')
+                            ->where(['o.status' => 'Completed', 'o.pay_status' => 'Paid'])
+                            ->where('created_date', $date)
+                            ->get()->row_array();
+
+        $expense = $this->db->select("SUM(price) AS expense")
+                            ->from('expenses')
+                            ->where(['is_deleted' => 0])
+                            ->where(['created_date' => $date])
+                            ->get()->row_array();
+        
+        return $revenue['revenue'] - $expense['expense'];
     }
 }

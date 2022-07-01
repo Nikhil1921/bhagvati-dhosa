@@ -16,7 +16,7 @@
         <?= link_tag('assets/back/vendor/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css', 'stylesheet', 'text/css') ?>
         <?= link_tag('assets/back/vendor/swiper/css/swiper-bundle.css', 'stylesheet', 'text/css') ?>
         <?= link_tag('assets/back/vendor/toastr/css/toastr.min.css', 'stylesheet', 'text/css') ?>
-        <?= link_tag('assets/back/css/style.css?v='.time(), 'stylesheet', 'text/css') ?>
+        <?= link_tag('assets/back/css/style.css?v=1.0.1', 'stylesheet', 'text/css') ?>
     </head>
     <body>
         <div id="preloader">
@@ -197,16 +197,18 @@
         <?= script("assets/back/vendor/toastr/js/toastr.min.js") ?>
         <?= script("assets/back/vendor/owl-carousel/owl.carousel.js") ?>
         <?= script("assets/back/vendor/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js") ?>
+        <?= script("assets/back/vendor/waypoints/jquery.waypoints.min.js") ?>
+        <?= script("assets/back/vendor/jquery.counterup/jquery.counterup.min.js") ?>
         <?= script("assets/back/vendor/chart.js/Chart.bundle.min.js") ?>
         <?= script("assets/back/vendor/apexchart/apexchart.js") ?>
-        <?= script("assets/back/js/custom.js") ?>
+        <?= script("assets/back/js/custom.js?v=1.0.1") ?>
         <?= script("assets/back/js/deznav-init.js") ?>
         <?php if(isset($datatable)): ?>
         <input type="hidden" name="dataTableUrl" value="<?= base_url($datatable) ?>" />
         <!-- Datatable -->
         <?= script("assets/back/vendor/datatables/js/jquery.dataTables.min.js") ?>
         <?= script("assets/back/vendor/sweetalert/js/sweetalert.min.js") ?>
-        <?= script("assets/back/js/datatables.js") ?>
+        <?= script("assets/back/js/datatables.js?v=1.0.1") ?>
         <?php endif ?>
     </body>
 </html>
